@@ -13,8 +13,8 @@ def dijkstra(aMap,start,goal):
     # dict/map, for storing results
     dist = {}
     prev = {} 
-    # one queue of all untouched nodes (hence only need to dequeue)
-    # dict/map with queue features (pop/additem)
+    # one priority (a dict/map hybrid with queue features, i.e. pop/additem) queue 
+    # of all untouched nodes (hence only need to dequeue)
     # smaller value has higher priority
     unexplored = minpq() 
 
@@ -29,8 +29,8 @@ def dijkstra(aMap,start,goal):
     while len(unexplored) > 0:
         # dequeue
         node,minD = unexplored.popitem()
-        #print('node = '+str(node))
         dist[node] = minD
+        #print('dist[node]= '+str(dist[node]))
         if node == goal:
             #print('dist = '+str(dist))
             #print('prev = '+str(prev))
@@ -56,24 +56,22 @@ def dijkstra_ucs(aMap,start,goal):
     dist = {}
     prev = {} 
     # two queues: 
-    # a queue of growing/incomplete untouched nodes
+    # a priority (dict-hybrid) queue of growing/incomplete untouched nodes
     frontier = minpq()
     # a queue of visited nodes
     explored = []
 
     frontier[start] = 0
 
-    while True:
-        if len(frontier) == 0:
-            return None
-
+    while len(frontier) > 0:
         # dequeue
         node,minD = frontier.popitem()
         dist[node] = minD
-        #print('minD = '+str(minD))
+        #print('dist[node]= '+str(dist[node]))
         if node == goal:
-            return getPath(node,prev),dist[node]
+            return getPath(node,prev),dist[node],explored
 
+        # enqueue
         explored.append(node)
 
         # visit neighbors
@@ -91,7 +89,45 @@ def dijkstra_ucs(aMap,start,goal):
     return None
 
 def Astar(aMap,start,goal):
-    # A* improvement
+    # A* improvement: works for inf maps and efficient
+    M,N = np.shape(aMap)
+
+    # dict/map, for storing results
+    dist = {} # mutable in A*
+    prev = {}
+    # two queues: 
+    # a priority (dict-hybrid) queue of growing/incomplete untouched nodes
+    frontier = minpq()
+    # a queue of visited nodes
+    explored = []
+
+    frontier[start] = 0+getHeuristic(start,goal)
+    dist[start] = 0
+
+    while len(frontier) > 0:
+        # dequeue
+        node = frontier.pop()
+        #print('dist[node]= '+str(dist[node]))
+        # dist.get(node,np.infty) is equivalent to dist[node] with the default value of np.infty 
+        if node == goal:
+            return getPath(node,prev),dist[node],explored
+
+        # enqueue
+        explored.append(node)
+
+        # visit neighbors
+        for ngb in getNeighbor(node,M,N):
+            #print('ngb = '+str(ngb))
+            if ngb not in explored:
+                if ngb not in frontier:
+                    frontier[ngb] = np.infty # new frontier
+                    dist[ngb] = np.infty
+
+                alt = dist[node] + getDist(node,ngb,aMap)
+                if alt < dist[ngb]:
+                    frontier[ngb] = alt+getHeuristic(ngb,goal)
+                    dist[ngb] = alt
+                    prev[ngb] = node
 
     return None
 
@@ -104,7 +140,12 @@ def getPath(cur,prev):
 
     return fullPath
 
+def getHeuristic(u,v):
+    # only estimate the true dist
+    return np.linalg.norm(np.array(u)-np.array(v))
+
 def getDist(u,v,aMap):
+    # get the exact dist
     if aMap[u] == 1 or aMap[v] == 1:
         return np.infty
 
