@@ -7,10 +7,10 @@ import numpy as np
 from pqdict import minpq
 
 def dijkstra(aMap,start,goal):
-    # basic, priority-queue version
+    # basic, priority-queue version: only works for finite maps
     M,N = np.shape(aMap)
 
-    # the queue of all untouched nodes
+    # one queue of all untouched nodes
     # dict/map with queue features (pop/additem)
     # smaller value has higher priority
     qDist = minpq() 
@@ -22,7 +22,6 @@ def dijkstra(aMap,start,goal):
                 qDist[(m,n)] = 0
             else:
                 qDist[(m,n)] = np.infty
-            prev[(m,n)] = np.nan
 
     while len(qDist) > 0:
         u = qDist.pop()
@@ -38,7 +37,13 @@ def dijkstra(aMap,start,goal):
     return None
 
 def dijkstra_ucs(aMap,start,goal):
-    # uniform cost search
+    # uniform cost search: works for inf maps
+    M,N = np.shape(aMap)
+
+    # two queues: 
+    # a queue of growing untouched nodes
+    # a queue of visited nodes
+
 
     return None
 
