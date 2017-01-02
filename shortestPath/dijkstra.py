@@ -155,9 +155,10 @@ def getNeighbor(node,M,N):
     ngb = []
     delta = [[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1],[-1,1]]
     for d in delta:
-        n = np.array(node)+d # list and dict just append elements, only np.array adds/mults element-wise
+        # list and dict just append elements, only np.array adds/mults element-wise
+        n = tuple(np.array(node)+d) 
         if n[0]>=0 and n[0]<M and n[1]>=0 and n[1]<N:
-            ngb.append(tuple(n))
+            ngb.append(n)
 
     return ngb
 
