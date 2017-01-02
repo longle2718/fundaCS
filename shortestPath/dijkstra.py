@@ -46,7 +46,7 @@ def dijkstra(aMap,start,goal):
                     unexplored[ngb] = alt
                     prev[ngb] = node
     
-    return None
+    return None,None
 
 def dijkstra_ucs(aMap,start,goal):
     # uniform cost search: works for inf maps
@@ -86,7 +86,7 @@ def dijkstra_ucs(aMap,start,goal):
                     frontier[ngb] = alt
                     prev[ngb] = node
 
-    return None
+    return None,None,None
 
 def Astar(aMap,start,goal):
     # A* improvement: works for inf maps and efficient
@@ -129,7 +129,7 @@ def Astar(aMap,start,goal):
                     dist[ngb] = alt
                     prev[ngb] = node
 
-    return None
+    return None,None,None
 
 def getPath(cur,prev):
     fullPath = []
