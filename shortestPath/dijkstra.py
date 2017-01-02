@@ -86,7 +86,7 @@ def dijkstra_ucs(aMap,start,goal):
                     frontier[ngb] = alt
                     prev[ngb] = node
 
-    return None,None,None
+    return None,None,explored
 
 def Astar(aMap,start,goal):
     # A* improvement: works for inf maps and efficient
@@ -129,7 +129,7 @@ def Astar(aMap,start,goal):
                     dist[ngb] = alt
                     prev[ngb] = node
 
-    return None,None,None
+    return None,None,explored
 
 def getPath(cur,prev):
     fullPath = []
