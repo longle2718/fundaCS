@@ -24,7 +24,7 @@ def dfs(aMap,start):
         # visit neighbors
         for ngb in getNeighbor(node,M,N):
             if ngb not in explored:
-                S.append(n)
+                S.append(ngb)
 
     return reachable
 
@@ -37,16 +37,17 @@ def bfs(aMap,start):
     Q.append(start)
     while len(Q) > 0:
         node = Q.pop(0)
+        #print('node = '+str(node))
 
         if aMap[node] == 0:
             reachable.append(node)
 
-        explored.append(node)
-
         # visit neighbors
         for ngb in getNeighbor(node,M,N):
             if ngb not in explored:
-                Q.append(n)
+                explored.append(ngb)
+                #print('explored = '+str(explored))
+                Q.append(ngb)
 
     return reachable
 
