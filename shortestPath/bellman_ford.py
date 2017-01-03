@@ -4,7 +4,6 @@
 # University of Illinois
 #
 import numpy as np
-from pqdict import minpq
 
 def bellman_ford(aMap,start,goal):
     M,N = np.shape(aMap)
