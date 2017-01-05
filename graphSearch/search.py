@@ -42,6 +42,11 @@ def bfs(aMap,start):
         if aMap[node] == 0:
             reachable.append(node)
 
+        # unlike shortest-path probs, each search node should only be 
+        # in the queue once. Once enqueued, the node is guaranteed to
+        # be visited after a finite amount of time, hence should be marked
+        # as explored as soon as it enters the queue.
+
         # visit neighbors
         for ngb in getNeighbor(node,M,N):
             if ngb not in explored:
