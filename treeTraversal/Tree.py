@@ -12,7 +12,7 @@ class TreeNode:
 
 def serialize(root):
     buf = []
-    self.serialize_recur(root,buf)
+    serialize_recur(root,buf)
     return ''.join(buf)
 
 def serialize_recur(root,buf):
@@ -51,13 +51,16 @@ def deserializePreIn(preorder, inorder):
     return deserializePreIn_recur(0,0,N-1,preorder,inorder)
 
 def deserializePreIn_recur(preStart,inStart,inEnd,preorder,inorder):
+    if preStart > inEnd:
+        return None
+
     root = TreeNode(preorder[preStart])
     inRoot = inorder.index(preorder[preStart])
     if inRoot-1 >= inStart:
         # root of the left subtree is next in preorder
-        root.left = buildTree_recur(preStart+1,inStart,inRoot-1,preorder,inorder)
+        root.left = deserializePreIn_recur(preStart+1,inStart,inRoot-1,preorder,inorder)
     if inRoot+1 <= inEnd:
         # root of the right subtree is next to preorder + # of nodes in the left subtree
-        root.right = buildTree_recur(preStart+inRoot-inStart+1,inRoot+1,inEnd,preorder,inorder)
+        root.right = deserializePreIn_recur(preStart+inRoot-inStart+1,inRoot+1,inEnd,preorder,inorder)
 
     return root
