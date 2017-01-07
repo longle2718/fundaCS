@@ -32,11 +32,11 @@ def serialize(root):
 def deserialize(data):
     buf = list(data)
 
-    S = []
     # create a dummy node 
     # this is a must in python to update references
     # inside an object due to the lack of pointers
     root = TreeNode(-1)
+    S = []
     S.append(root)
 
     while len(S) > 0:
@@ -64,36 +64,3 @@ def deserialize(data):
 
     return root 
 
-def deserializePreIn(preorder, inorder):
-    '''
-    build a tree using preorder and inorder traversal results
-    '''
-    N = len(inorder)
-    if N == 0:
-        return None
-
-    root = None
-    preStart = 0
-    inStart = 0
-    inEnd = N-1
-    while True:
-        if preStart > iEnd:
-            break
-
-
-    return root
-
-def deserializePreIn_recur(preStart,inStart,inEnd,preorder,inorder):
-    if preStart > inEnd:
-        return None
-
-    root = TreeNode(preorder[preStart])
-    inRoot = inorder.index(preorder[preStart])
-    if inRoot-1 >= inStart:
-        # root of the left subtree is next in preorder
-        root.left = deserializePreIn_recur(preStart+1,inStart,inRoot-1,preorder,inorder)
-    if inRoot+1 <= inEnd:
-        # root of the right subtree is next to preorder + # of nodes in the left subtree
-        root.right = deserializePreIn_recur(preStart+inRoot-inStart+1,inRoot+1,inEnd,preorder,inorder)
-
-    return root
