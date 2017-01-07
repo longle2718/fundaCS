@@ -141,12 +141,17 @@ def getPath(cur,prev):
     return fullPath
 
 # This heurisic function is admissible, since it never
-# overestimates the actual cost.
+# overestimates the actual cost. A* is then optimal without
+# the explored set (a node might need to be processed more
+# than once). However, this is computationally inefficient.
 #
-# This heuristic function is also monotone/consistent,
+# This heuristic function is also monotone/consistent 
+# (it is impossible to reduce the distance by adding
+# a neighbor to the current path),
 # which guarantees that nodes in the explored set 
 # cannot have their distance improved, and hence only need
-# to be processed once (thus the explored set).
+# to be processed once (thus warrant the use of the 
+# explored set).
 def getHeuristic(u,v):
     # only estimate the true dist
     return np.linalg.norm(np.array(u)-np.array(v))
