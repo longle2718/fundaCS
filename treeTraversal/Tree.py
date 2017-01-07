@@ -12,33 +12,55 @@ class TreeNode:
 
 def serialize(root):
     buf = []
-    serialize_recur(root,buf)
+
+    S = []
+    S.append(root)
+
+    while len(S) > 0:
+        node = S.pop()
+
+        if node != None:
+            buf.append(str(node.val))
+
+            S.append(node.right)
+            S.append(node.left)
+        else:
+            buf.append('X')
+
     return ''.join(buf)
 
-def serialize_recur(root,buf):
-    if root == None:
-        buf.append('X')
-        return None
-
-    buf.append(str(root.val))
-    serialize_recur(root.left,buf)
-    serialize_recur(root.right,buf)
-    return None
-
 def deserialize(data):
-    return deserialize_recur(list(data))
+    buf = list(data)
 
-def deserialize_recur(buf):
-    if len(buf) == 0:
-        return None
-    c = buf.pop(0)
-    if c == 'X':
-        return None
+    S = []
+    # create a dummy node 
+    root = TreeNode(-1)
+    S.append(root)
 
-    root = TreeNode(int(c))
-    root.left = deserialize_recur(buf)
-    root.right = deserialize_recur(buf)
-    return root
+    while len(S) > 0:
+        node = S.pop()
+        #print('node.val = '+str(node.val))
+
+        if len(buf) > 0:
+            c = buf.pop(0)
+            #print('c = '+str(c))
+            if c != 'X':
+                nodeNew = TreeNode(int(c))
+                # detect left node
+                if len(S) > 0 and S[-1].val == node.val:
+                    node.left = nodeNew
+                else:
+                    node.right = nodeNew
+
+                S.append(nodeNew)
+                S.append(nodeNew)
+
+    # remove the dummy node
+    tmp = root
+    root = root.right
+    del tmp
+
+    return root 
 
 def deserializePreIn(preorder, inorder):
     '''
@@ -48,7 +70,16 @@ def deserializePreIn(preorder, inorder):
     if N == 0:
         return None
 
-    return deserializePreIn_recur(0,0,N-1,preorder,inorder)
+    root = None
+    preStart = 0
+    inStart = 0
+    inEnd = N-1
+    while True:
+        if preStart > iEnd:
+            break
+
+
+    return root
 
 def deserializePreIn_recur(preStart,inStart,inEnd,preorder,inorder):
     if preStart > inEnd:
