@@ -140,6 +140,13 @@ def getPath(cur,prev):
 
     return fullPath
 
+# This heurisic function is admissible, since it never
+# overestimates the actual cost.
+#
+# This heuristic function is also monotone/consistent,
+# which guarantees that nodes in the explored set 
+# cannot have their distance improved, and hence only need
+# to be processed once (thus the explored set).
 def getHeuristic(u,v):
     # only estimate the true dist
     return np.linalg.norm(np.array(u)-np.array(v))

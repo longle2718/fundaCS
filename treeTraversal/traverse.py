@@ -1,7 +1,8 @@
 # Tree traversal using DFS and BFS 
 # Unlike graph search probs, each node in a tree 
 # does not have overlapping neighbors.
-# Hence, there is no need to have the explored queue.
+# Hence, there is no need to have the explored queue
+# to ensure each node is only visited once.
 #
 # Long Le <longle1@illinois.edu>
 # University of Illinois

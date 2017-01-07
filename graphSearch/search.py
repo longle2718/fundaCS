@@ -1,9 +1,8 @@
 # Graph search using DFS and BFS 
-# Unlike shortest-path probs, each search node should only be 
-# visited (in the queue) once. Hence, once enqueued as a 
-# frontier, a node is guaranteed to be visited after a 
-# finite amount of time, and should be marked as explored 
-# as soon as possible
+# Unlike shortest-path probs, there is no notion of 
+# distance in the frontier queue/stack here, i.e. a frontier
+# node does not change its priority before being dequeued,
+# and hence, should be marked explored as soon as possible.
 #
 # Long Le <longle1@illinois.edu>
 # University of Illinois
