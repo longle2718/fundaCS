@@ -34,6 +34,8 @@ def deserialize(data):
 
     S = []
     # create a dummy node 
+    # this is a must in python to update references
+    # inside an object due to the lack of pointers
     root = TreeNode(-1)
     S.append(root)
 
