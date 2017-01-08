@@ -14,7 +14,7 @@ def dfs(aMap,start):
     M,N = np.shape(aMap)
     reachable = []
 
-    explored = []
+    explored = set()
     frontierS = []
     frontierS.append(start)
     while len(frontierS) > 0:
@@ -26,7 +26,7 @@ def dfs(aMap,start):
         # visit neighbors
         for ngb in getNeighbor(node,M,N):
             if ngb not in explored:
-                explored.append(ngb)
+                explored.add(ngb)
 
                 frontierS.append(ngb)
 
@@ -36,7 +36,7 @@ def bfs(aMap,start):
     M,N = np.shape(aMap)
     reachable = []
 
-    explored = []
+    explored = set()
     frontierQ = []
     frontierQ.append(start)
     while len(frontierQ) > 0:
@@ -49,7 +49,7 @@ def bfs(aMap,start):
         # visit neighbors
         for ngb in getNeighbor(node,M,N):
             if ngb not in explored:
-                explored.append(ngb)
+                explored.add(ngb)
                 #print('explored = '+str(explored))
                 frontierQ.append(ngb)
 
