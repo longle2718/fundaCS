@@ -59,7 +59,8 @@ def dijkstra_ucs(aMap,start,goal):
     # a priority (dict-hybrid) queue of growing/incomplete untouched nodes
     frontier = minpq()
     # a queue of visited nodes
-    explored = []
+    #explored = []
+    explored = set()
 
     frontier[start] = 0
 
@@ -72,7 +73,8 @@ def dijkstra_ucs(aMap,start,goal):
             return getPath(node,prev),dist[node],explored
 
         # enqueue
-        explored.append(node)
+        #explored.append(node)
+        explored.add(node)
 
         # visit neighbors
         for ngb in getNeighbor(node,M,N):
@@ -99,7 +101,7 @@ def Astar(aMap,start,goal):
     # a priority (dict-hybrid) queue of growing/incomplete untouched nodes
     frontier = minpq()
     # a queue of visited nodes
-    explored = []
+    explored = set()
 
     frontier[start] = 0+getHeuristic(start,goal)
     dist[start] = 0
@@ -113,7 +115,7 @@ def Astar(aMap,start,goal):
             return getPath(node,prev),dist[node],explored
 
         # enqueue
-        explored.append(node)
+        explored.add(node)
 
         # visit neighbors
         for ngb in getNeighbor(node,M,N):
