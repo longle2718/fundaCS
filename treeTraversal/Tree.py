@@ -20,17 +20,18 @@ def serialize(root):
         node = S.pop()
 
         if node != None:
-            buf.append(str(node.val))
+            buf.append(str(node.val)+',')
 
             S.append(node.right)
             S.append(node.left)
         else:
-            buf.append('X')
+            buf.append('X,')
 
     return ''.join(buf)
 
 def deserialize(data):
-    buf = list(data)
+    buf = data.split(',')
+    del buf[-1]
 
     # create a dummy node 
     # this is a must in python to update references
