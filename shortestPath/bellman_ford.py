@@ -23,7 +23,7 @@ def bellman_ford(aMap,start,goal):
 
     # Step 2: relaxation
     edges = getEdges(M,N)
-    for i in range(M*N-1):
+    for i in range(M*N):
         for e in edges:
             u = e[0]
             v = e[1]

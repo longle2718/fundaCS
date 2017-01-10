@@ -48,6 +48,38 @@ def dijkstra(aMap,start,goal):
     
     return None,None
 
+# no priority queue/BFS version, slow.
+def dijkstra_bfs(aMap,start,goal):
+    M,N = np.shape(aMap)
+    dist = {}
+    for m in range(M):
+        for n in range(N):
+            node = (m,n)
+            if node == start:
+                dist[node] = 0
+            else:
+                dist[node] = np.infty
+    prev = {}
+
+    explored = set()
+    frontierQ = []
+    frontierQ.append(start)
+    while len(frontierQ) > 0:
+        node = frontierQ.pop(0)
+        
+        explored.add(node)
+
+        for ngb in getNeighbor(node,M,N):
+            if ngb not in explored:
+                frontierQ.append(ngb)
+
+                alt = dist[node] + getDist(node,ngb,aMap)
+                if alt < dist[ngb]:
+                    dist[ngb] = alt
+                    prev[ngb] = node
+
+    return getPath(goal,prev),dist[goal],explored
+
 def dijkstra_ucs(aMap,start,goal):
     # uniform cost search: works for inf maps
     M,N = np.shape(aMap)
