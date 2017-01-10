@@ -1,4 +1,6 @@
 '''
+Quick sort algorithms
+
 Long Le <longle1@illinois.edu>
 University of Illinois
 '''
