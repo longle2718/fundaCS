@@ -18,11 +18,13 @@ class LFUBin:
         self.binHead = BinNode(0) # dummy node
 
     def push(self,key):
+        # lookup the node
         if key not in self.nodeMap:
             node = self.binHead
         else:
             node = self.nodeMap[key]
             
+        # operate on the found node
         if node.next == None:
             # insert new BinNode  at the end
             node.next = BinNode(node.cnt+1)
@@ -41,31 +43,34 @@ class LFUBin:
             node.next.prev = tmp
             node.next = tmp
 
+        # remove key
         if len(node.keys) > 0:
             node.keys.remove(key)
+        # remove node
         if node!= self.binHead and len(node.keys) == 0:
-            # remove node
             node.prev.next = node.next
             node.next.prev = node.prev
 
+        # finalize
         self.nodeMap[key] = node.next
 
     def pop(self):
+        # lookup the node
         if self.binHead.next == None:
             return None
-
         node1 = self.binHead.next
+
+        # remove key
         if len(node1.keys) > 0:
             lfuKey = node1.keys.pop(0)
+        # remove node1
         if len(node1.keys) == 0:
-            # remove node1
             node1.prev.next = node1.next
             node1.next.prev = node1.prev
 
+        # finalize
         del self.nodeMap[lfuKey]
         return lfuKey
-
-        return None
 
 class LFUCache:
     def __init__(self,capacity):
