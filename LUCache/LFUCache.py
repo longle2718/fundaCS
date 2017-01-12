@@ -49,7 +49,8 @@ class LFUBin:
         # remove node
         if node!= self.binHead and len(node.keys) == 0:
             node.prev.next = node.next
-            node.next.prev = node.prev
+            if node.next != None:
+                node.next.prev = node.prev
 
         # finalize
         self.nodeMap[key] = node.next
@@ -59,6 +60,12 @@ class LFUBin:
         if self.binHead.next == None:
             return None
         node1 = self.binHead.next
+        '''
+        print('node1.cnt = '+str(node1.cnt))
+        print('node1.keys = '+str(node1.keys))
+        print('node1.prev = '+str(node1.prev))
+        print('node1.next = '+str(node1.next))
+        '''
 
         # remove key
         if len(node1.keys) > 0:
@@ -66,7 +73,8 @@ class LFUBin:
         # remove node1
         if len(node1.keys) == 0:
             node1.prev.next = node1.next
-            node1.next.prev = node1.prev
+            if node1.next != None:
+                node1.next.prev = node1.prev
 
         # finalize
         del self.nodeMap[lfuKey]
@@ -86,11 +94,12 @@ class LFUCache:
             return -1
 
     def put(self,key,value):
-        if len(self.valueMap) >= self.cap:
-            lfuKey = self.mLFUBin.pop()
-            del self.valueMap[lfuKey]
+        if self.cap > 0:
+            if len(self.valueMap) >= self.cap:
+                lfuKey = self.mLFUBin.pop()
+                del self.valueMap[lfuKey]
 
-        self.valueMap[key] = value
-        self.mLFUBin.push(key)
+            self.valueMap[key] = value
+            self.mLFUBin.push(key)
         return None
 
