@@ -95,11 +95,18 @@ class LFUCache:
 
     def put(self,key,value):
         if self.cap > 0:
-            if len(self.valueMap) >= self.cap:
-                lfuKey = self.mLFUBin.pop()
-                del self.valueMap[lfuKey]
+            if key in self.valueMap:
+                # update an existing key
+                self.valueMap[key] = value
+                self.mLFUBin.push(key)
+            else:
+                # add a new key
+                if len(self.valueMap) >= self.cap:
+                    lfuKey = self.mLFUBin.pop()
+                    del self.valueMap[lfuKey]
 
-            self.valueMap[key] = value
-            self.mLFUBin.push(key)
+                self.valueMap[key] = value
+                self.mLFUBin.push(key)
+
         return None
 
