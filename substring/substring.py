@@ -4,6 +4,7 @@ The common template.
 
 def findSubstring(s):
     cntMap = {} # check whether the substring is valid
+    # the analog of initializing the queue
     for c in s:
         cntMap[c] = 0
     cnt = 0
@@ -12,13 +13,17 @@ def findSubstring(s):
     end = 0
     d = 0
     while end < len(s):
+        # the analog of dequeuing
         if cntMap[s[end]]:
             # modify cnt here
         cntMap[s[end]] -= 1
         end += 1
 
+        # the analog of getting neighbor nodes
         while: # cnt condition
             # update d here if finding minimum
+
+            # the analog of enqueuing
             # increase begin to make it invalid/valid again
             if cntMap[s[begin]]:
                 # modify cnt here
@@ -52,7 +57,7 @@ def anagramSubstr(s,p):
     begin = 0 # head pointer
     end = 0 # tail pointer
     while end < len(s):
-        # proceed to process
+        # the analog of dequeuing
         # move right everytime, if the character exists in p's hash, decrease the cnt
         # current hash value >= 1 means the character is existing in p
         if cntMap[s[end]] >= 1:
@@ -69,6 +74,7 @@ def anagramSubstr(s,p):
         # if we find the window's size equals to p, then we have to move left 
         #(narrow the window) to find the new match window
         if end - begin == len(p):
+            # the analog of enqueuing
             # must undo if applicable
             # notice that cnt is incremented/decremented only once at the boundary of 1/0
             if cntMap[s[begin]] >= 0:
