@@ -3,7 +3,7 @@ Substrings related utilities.
 The common template.
 
 def findSubstring(s):
-    cntMap = {}
+    cntMap = {} # check whether the substring is valid
     for c in s:
         cntMap[c] = 0
     cnt = 0
@@ -39,6 +39,7 @@ def anagramSubstr(s,p):
         return rv
 
     # initialize the hash map here
+    # character-to-the diff in the # of occurrences between p and s[begin:end]
     cntMap = {}
     for c in s:
         cntMap[c] = 0
@@ -51,6 +52,7 @@ def anagramSubstr(s,p):
     begin = 0 # head pointer
     end = 0 # tail pointer
     while end < len(s):
+        # proceed to process
         # move right everytime, if the character exists in p's hash, decrease the cnt
         # current hash value >= 1 means the character is existing in p
         if cntMap[s[end]] >= 1:
@@ -67,6 +69,8 @@ def anagramSubstr(s,p):
         # if we find the window's size equals to p, then we have to move left 
         #(narrow the window) to find the new match window
         if end - begin == len(p):
+            # must undo if applicable
+            # notice that cnt is incremented/decremented only once at the boundary of 1/0
             if cntMap[s[begin]] >= 0:
                 # only increase the cnt if the character is in p
                 # the cnt >= 0 indicate it was original in the hash, cuz it won't go below 0
