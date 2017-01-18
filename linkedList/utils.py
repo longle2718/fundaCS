@@ -1,5 +1,5 @@
 '''
-Linked list functions.
+Linked list utilities.
 Since there's no pointer in python, a dummy node is 
 required to modify a linked list
 
