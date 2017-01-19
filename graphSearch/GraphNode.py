@@ -17,10 +17,21 @@ class GraphNode:
 
 def serialize(nodes):
     # input is an array of GraphNodes
+    # map nodes to index integers
+    idxMap = {}
+    k = 0
+    for node in nodes:
+        idxMap[node] = k
+        k += 1
+
+    # output is an array of dictionaries
     dicts = []
     for node in nodes:
-        dicts.append({'val':node.val,'ngbs':list(node.ngbs)})
+        idxNgbs = []
+        for ngb in node.ngbs:
+            idxNgbs.append(idxMap[ngb])
 
+        dicts.append({'val':node.val,'idx':idxMap[node],'idxNgbs':idxNgbs})
     return json.dumps(dicts)
 
 def deserialize(data,plot=False):
