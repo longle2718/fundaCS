@@ -83,7 +83,7 @@ def deserialize(data,plot=False):
         for node,loc in locMap.items():
             if parentMap[node] in locMap:
                 locParent = locMap[parentMap[node]]
-                plt.plot([locParent[0],loc[0]],[locParent[1],loc[1]])
+                plt.plot([locParent[0],loc[0]],[locParent[1],loc[1]],marker='o')
             plt.annotate(str(node.val),xy=loc)
         plt.show()
 
