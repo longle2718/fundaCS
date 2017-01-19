@@ -20,12 +20,12 @@ def dfs(root,buf):
     
         buf.append(node.val) # pre-order
 
-        if (node.right != None):
+        if node.right != None:
             S.append(node.right)
 
         #buf.append(node.val) # in-order
 
-        if (node.left != None):
+        if node.left != None:
             S.append(node.left)
 
         #buf.append(node.val) # post-order
@@ -44,9 +44,9 @@ def bfs(root,buf):
 
         buf.append(node.val)
 
-        if (node.left != None):
+        if node.left != None:
             Q.append(node.left)
-        if (node.right != None):
+        if node.right != None:
             Q.append(node.right)
 
     return None
