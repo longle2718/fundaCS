@@ -56,10 +56,11 @@ def deserialize(data,plot=False):
         ax.add_artist(plt.Circle((0, 0), 1.,color='k',ls='--',fill=False))
         for node in nodes:
             loc = locMap[node]
+            plt.scatter(loc[0],loc[1],lw=32)
             plt.annotate(str(node.val),xy=loc,xytext=(loc[0]+.1,loc[1]+.1))
             for ngb in node.ngbs:
                 locNgb = locMap[ngb]
-                plt.arrow(loc[0],loc[1],locNgb[0]-loc[0],locNgb[1]-loc[1],head_width=0.05,head_length=0.1,fc='k',ec='k')
+                plt.arrow(loc[0],loc[1],locNgb[0]-loc[0],locNgb[1]-loc[1],head_width=.1,head_length=.1,fc='k',ec='k')
                 #plt.plot([loc[0],locNgb[0]],[loc[1],locNgb[1]])
 
         plt.axis([-1.2,1.2,-1.2,1.2])
