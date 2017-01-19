@@ -47,6 +47,8 @@ def deserialize(data,plot=False):
     locMap[root] = (0,0)
     heightMap = {}
     heightMap[root] = 0
+    parentMap = {}
+    parentMap[root] = None
 
     while len(S) > 0:
         node = S.pop()
@@ -57,16 +59,18 @@ def deserialize(data,plot=False):
             #print('c = '+str(c))
             if c != 'X':
                 nodeNew = TreeNode(int(c))
+
+                parentMap[nodeNew] = node
+                heightMap[nodeNew] = heightMap[node]+1
+
                 # detect left node
                 if len(S) > 0 and S[-1].val == node.val:
                     node.left = nodeNew
 
-                    heightMap[nodeNew] = heightMap[node]+1
                     locMap[nodeNew] = tuple(np.array(locMap[node])-[1/2**heightMap[node],1])
                 else:
                     node.right = nodeNew
 
-                    heightMap[nodeNew] = heightMap[node]+1
                     locMap[nodeNew] = tuple(np.array(locMap[node])-[-1/2**heightMap[node],1])
 
                 S.append(nodeNew)
@@ -75,8 +79,11 @@ def deserialize(data,plot=False):
     if plot:
         del locMap[root]
         del heightMap[root]
+        del parentMap[root]
         for node,loc in locMap.items():
-            plt.scatter(loc[0],loc[1])
+            if parentMap[node] in locMap:
+                locParent = locMap[parentMap[node]]
+                plt.plot([locParent[0],loc[0]],[locParent[1],loc[1]])
             plt.annotate(str(node.val),xy=loc)
         plt.show()
 
