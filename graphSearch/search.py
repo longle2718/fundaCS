@@ -32,6 +32,27 @@ def dfs(aMap,start):
 
     return reachable
 
+def dfs2(nodes,start):
+    # non recursive implementation
+    reachable = []
+
+    explored = set()
+    frontierS = []
+    frontierS.append(start)
+    while len(frontierS) > 0:
+        node = frontierS.pop()
+
+        reachable.append(node.val)
+
+        # visit neighbors
+        for ngb in node.ngbs:
+            if ngb not in explored:
+                explored.add(ngb)
+
+                frontierS.append(ngb)
+
+    return reachable
+
 def bfs(aMap,start):
     M,N = np.shape(aMap)
     reachable = []
@@ -48,6 +69,27 @@ def bfs(aMap,start):
 
         # visit neighbors
         for ngb in getNeighbor(node,M,N):
+            if ngb not in explored:
+                explored.add(ngb)
+                #print('explored = '+str(explored))
+                frontierQ.append(ngb)
+
+    return reachable
+
+def bfs2(nodes,start):
+    reachable = []
+
+    explored = set()
+    frontierQ = []
+    frontierQ.append(start)
+    while len(frontierQ) > 0:
+        node = frontierQ.pop(0)
+        #print('node = '+str(node))
+
+        reachable.append(node.val)
+
+        # visit neighbors
+        for ngb in node.ngbs:
             if ngb not in explored:
                 explored.add(ngb)
                 #print('explored = '+str(explored))

@@ -68,7 +68,7 @@ def deserialize(data,plot=False):
         for node in nodes:
             loc = locMap[node]
             plt.scatter(loc[0],loc[1],lw=32)
-            plt.annotate(str(node.val),xy=loc,xytext=(loc[0]+.1,loc[1]+.1))
+            plt.annotate(str(node.val),xy=loc,xytext=(loc[0]+.1,loc[1]+.1),fontsize=15)
             for ngb in node.ngbs:
                 locNgb = locMap[ngb]
                 plt.arrow(loc[0],loc[1],locNgb[0]-loc[0],locNgb[1]-loc[1],head_width=.1,head_length=.1,fc='k',ec='k')
