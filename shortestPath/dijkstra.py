@@ -48,7 +48,8 @@ def dijkstra(aMap,start,goal):
     
     return None,None
 
-# no priority queue/BFS version, slow.
+# no priority queue, only optimal for uniform dist
+# BFS the whole map
 def dijkstra_bfs(aMap,start,goal):
     M,N = np.shape(aMap)
     dist = {}
@@ -80,6 +81,7 @@ def dijkstra_bfs(aMap,start,goal):
 
     return getPath(goal,prev),dist[goal],explored
 
+# with a priority queue, greedy is optimal
 def dijkstra_ucs(aMap,start,goal):
     # uniform cost search: works for inf maps
     M,N = np.shape(aMap)

@@ -4,7 +4,7 @@
 # no overlapping enqueue. 
 # However, for post- and in-order traversal, it is
 # possible to re-enqueue processed nodes, which must
-# be avoided (completely) by having the explored set 
+# be avoided by having the explored set 
 # to mark processed nodes.
 #
 # Long Le <longle1@illinois.edu>
