@@ -1,14 +1,9 @@
 # Graph search using DFS and BFS 
 # 
-# In graph search, there is overlapping enqueue. Hence processed
+# In graph search, there is overlapping enqueue because there is
+# overlapping neighbors. To avoid overlapping processing, processed
 # nodes need to be kept tracked by the explored set. Note that
-# even with the explored set, overlapping enqueues are still possible.
-#
-# Unlike shortest-path probs, there is no notion of 
-# distance in the frontier queue/stack here, i.e. a frontier
-# node does not change its priority (relaxation) before being dequeued.
-# Hence, overlapping enqueues can be avoided completely by 
-# marking enqueuing (instead of dequeued) nodes as explored.
+# the explored set only helps reduce overlapping enqueues.
 #
 # Long Le <longle1@illinois.edu>
 # University of Illinois
@@ -26,13 +21,14 @@ def dfsPre(aMap,start):
     while len(frontierS) > 0:
         node = frontierS.pop()
 
+        if node in explored:
+            continue
         reachable.append(node)
+        explored.add(node)
 
         # visit neighbors
         for ngb in getNeighbor(node,aMap):
             if ngb not in explored:
-                explored.add(ngb)
-
                 frontierS.append(ngb)
 
     return reachable
@@ -47,6 +43,7 @@ def dfsPost(aMap,start):
     frontierS.append(start)
     while len(frontierS) > 0:
         node = frontierS[-1]
+        #print('peek = '+str(node))
 
         if node in explored:
             frontierS.pop()
@@ -55,6 +52,8 @@ def dfsPost(aMap,start):
         if len(ngbs) == 0 or allIn(ngbs,explored):
             reachable.append(node)
             explored.add(node)
+            frontierS.pop()
+            #print('pop = '+str(node))
 
         # visit neighbors
         for ngb in getNeighbor(node,aMap):
@@ -73,13 +72,14 @@ def dfs2Pre(nodes,start):
     while len(frontierS) > 0:
         node = frontierS.pop()
 
+        if node in explored:
+            continue
         reachable.append(node.val)
+        explored.add(node)
 
         # visit neighbors
         for ngb in node.ngbs:
             if ngb not in explored:
-                explored.add(ngb)
-
                 frontierS.append(ngb)
 
     return reachable
@@ -100,7 +100,8 @@ def dfs2Post(nodes,start):
             continue
         if len(node.ngbs) == 0 or allIn(node.ngbs, explored):
             reachable.append(node.val)
-            explored.add(frontierS.pop())
+            explored.add(node)
+            frontierS.pop()
             #print('pop = '+str(node.val))
 
         # visit neighbors
@@ -110,6 +111,13 @@ def dfs2Post(nodes,start):
 
     return reachable
 
+# Since BFS uses a queue, enqueued nodes are guaranteed to be
+# processed in finite steps. Hence overlapping enqueue (and thus
+# overlapping processing) can be completely avoided by 
+# marking enqueuing (instead of dequeued) nodes as explored.
+# Note that this cannot be applied for shortest path problems,
+# where priorities/values of nodes in the queue can change
+# before being dequeued.
 def bfs(aMap,start):
     M,N = np.shape(aMap)
     reachable = []
