@@ -15,7 +15,7 @@
 #
 import numpy as np
 
-def dfs(aMap,start):
+def dfsPre(aMap,start):
     # non recursive implementation
     M,N = np.shape(aMap)
     reachable = []
@@ -34,6 +34,33 @@ def dfs(aMap,start):
             if ngb not in explored:
                 explored.add(ngb)
 
+                frontierS.append(ngb)
+
+    return reachable
+
+def dfsPost(aMap,start):
+    # non recursive implementation
+    M,N = np.shape(aMap)
+    reachable = []
+
+    explored = set()
+    frontierS = []
+    frontierS.append(start)
+    while len(frontierS) > 0:
+        node = frontierS[-1]
+
+        if node in explored:
+            frontierS.pop()
+            continue
+        ngbs = getNeighbor(node,M,N)
+        if len(ngbs) == 0 or allIn(ngbs,explored):
+            if aMap[node] == 0:
+                reachable.append(node)
+            explored.add(node)
+
+        # visit neighbors
+        for ngb in getNeighbor(node,M,N):
+            if ngb not in explored:
                 frontierS.append(ngb)
 
     return reachable
