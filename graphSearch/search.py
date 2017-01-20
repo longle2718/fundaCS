@@ -26,11 +26,10 @@ def dfsPre(aMap,start):
     while len(frontierS) > 0:
         node = frontierS.pop()
 
-        if aMap[node] == 0:
-            reachable.append(node)
+        reachable.append(node)
 
         # visit neighbors
-        for ngb in getNeighbor(node,M,N):
+        for ngb in getNeighbor(node,aMap):
             if ngb not in explored:
                 explored.add(ngb)
 
@@ -52,14 +51,13 @@ def dfsPost(aMap,start):
         if node in explored:
             frontierS.pop()
             continue
-        ngbs = getNeighbor(node,M,N)
+        ngbs = getNeighbor(node,aMap)
         if len(ngbs) == 0 or allIn(ngbs,explored):
-            if aMap[node] == 0:
-                reachable.append(node)
+            reachable.append(node)
             explored.add(node)
 
         # visit neighbors
-        for ngb in getNeighbor(node,M,N):
+        for ngb in getNeighbor(node,aMap):
             if ngb not in explored:
                 frontierS.append(ngb)
 
@@ -123,11 +121,10 @@ def bfs(aMap,start):
         node = frontierQ.pop(0)
         #print('node = '+str(node))
 
-        if aMap[node] == 0:
-            reachable.append(node)
+        reachable.append(node)
 
         # visit neighbors
-        for ngb in getNeighbor(node,M,N):
+        for ngb in getNeighbor(node,aMap):
             if ngb not in explored:
                 explored.add(ngb)
                 #print('explored = '+str(explored))
@@ -163,11 +160,12 @@ def allIn(nodes,Q):
 
     return True
 
-def getNeighbor(node,M,N):
+def getNeighbor(node,aMap):
+    M,N = np.shape(aMap)
     ngb = []
     for d in [[0,1],[1,0],[1,1],[0,-1],[-1,0],[-1,-1],[1,-1],[-1,1]]:
         n = tuple(np.array(node)+d) 
-        if n[0]>=0 and n[0]<M and n[1]>=0 and n[1]<N:
+        if n[0]>=0 and n[0]<M and n[1]>=0 and n[1]<N and aMap[n] == 0:
             ngb.append(n)
 
     return ngb
