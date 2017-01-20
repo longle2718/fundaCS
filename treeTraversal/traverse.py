@@ -22,16 +22,16 @@ def dfsPost(root,buf):
         node = S[-1]
         #print('peek = '+str(node.val))
 
-        if node.right != None and node.right not in explored:
-            S.append(node.right)
-        if node.left != None and node.left not in explored:
-            S.append(node.left)
-
         if ((node.left == None or node.left in explored) and 
             (node.right == None or node.right in explored)):
             buf.append(node.val)
             explored.add(S.pop())
             #print('pop = '+str(node.val))
+
+        if node.right != None and node.right not in explored:
+            S.append(node.right)
+        if node.left != None and node.left not in explored:
+            S.append(node.left)
 
     '''
     # Wikipedia implementation
