@@ -1,9 +1,11 @@
 # Tree traversal using DFS and BFS 
 # Unlike graph search probs, each node in a tree 
-# does not have overlapping neighbors.
-# Hence, there is no need to have the explored queue
-# to ensure each node is only visited once (except 
-# for post- and in-order traversal).
+# does not have overlapping neighbors. Hence there is
+# no overlapping enqueue. 
+# However, for post- and in-order traversal, it is
+# possible to re-enqueue processed nodes, which must
+# be avoided (completely) by having the explored set 
+# to mark processed nodes.
 #
 # Long Le <longle1@illinois.edu>
 # University of Illinois

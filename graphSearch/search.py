@@ -1,8 +1,14 @@
 # Graph search using DFS and BFS 
+# 
+# In graph search, there is overlapping enqueue. Hence processed
+# nodes need to be kept tracked by the explored set. Note that
+# even with the explored set, overlapping enqueues are still possible.
+#
 # Unlike shortest-path probs, there is no notion of 
 # distance in the frontier queue/stack here, i.e. a frontier
-# node does not change its priority before being dequeued,
-# and hence, should be marked explored as soon as possible.
+# node does not change its priority (relaxation) before being dequeued.
+# Hence, overlapping enqueues can be avoided completely by 
+# marking enqueuing (instead of dequeued) nodes as explored.
 #
 # Long Le <longle1@illinois.edu>
 # University of Illinois
@@ -32,7 +38,7 @@ def dfs(aMap,start):
 
     return reachable
 
-def dfs2(nodes,start):
+def dfs2Pre(nodes,start):
     # non recursive implementation
     reachable = []
 
@@ -49,6 +55,32 @@ def dfs2(nodes,start):
             if ngb not in explored:
                 explored.add(ngb)
 
+                frontierS.append(ngb)
+
+    return reachable
+
+def dfs2Post(nodes,start):
+    # non recursive implementation
+    reachable = []
+
+    explored = set()
+    frontierS = []
+    frontierS.append(start)
+    while len(frontierS) > 0:
+        node = frontierS[-1]
+        #print('peek = '+str(node.val))
+
+        if node in explored:
+            frontierS.pop()
+            continue
+        if len(node.ngbs) == 0 or allIn(node.ngbs, explored):
+            reachable.append(node.val)
+            explored.add(frontierS.pop())
+            #print('pop = '+str(node.val))
+
+        # visit neighbors
+        for ngb in node.ngbs:
+            if ngb not in explored:
                 frontierS.append(ngb)
 
     return reachable
@@ -96,6 +128,13 @@ def bfs2(nodes,start):
                 frontierQ.append(ngb)
 
     return reachable
+
+def allIn(nodes,Q):
+    for node in nodes:
+        if node not in Q:
+            return False
+
+    return True
 
 def getNeighbor(node,M,N):
     ngb = []

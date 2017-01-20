@@ -186,6 +186,8 @@ def getPath(cur,prev):
 # cannot have their distance improved, and hence only need
 # to be processed once (thus warrant the use of the 
 # explored set).
+# In order words, the greedy approach of prioritized 
+# dequeuing is optimal
 def getHeuristic(u,v):
     # only estimate the true dist
     return np.linalg.norm(np.array(u)-np.array(v))
