@@ -8,7 +8,44 @@
 # University of Illinois
 #
 
-def dfs(root,buf):
+def dfsPost(root,buf):
+    # post-order 
+    S = []
+    node = root
+    nodeLast = None
+    # need a stack, a probing node, and a last node
+    while len(S) > 0 or node != None:
+        if node != None:
+            S.append(node)
+            node = node.left
+        else:
+            nodePeek = S[-1]
+            if nodePeek.right != None and nodeLast != nodePeek.right:
+                node = nodePeek.right
+            else:
+                buf.append(nodePeek.val)
+                nodeLast = S.pop()
+
+    return None
+
+def dfsIn(root,buf):
+    # in-order
+    S = []
+    node = root
+    # need both the stack and an additional probing node
+    while len(S) > 0 or node != None:
+        if node != None:
+            S.append(node)
+            node = node.left
+        else:
+            node = S.pop()
+            buf.append(node.val)
+            node = node.right
+
+    return None
+
+def dfsPre(root,buf):
+    # pre-order
     if root == None:
         return None
 
@@ -18,21 +55,17 @@ def dfs(root,buf):
     while len(S) > 0:
         node = S.pop()
     
-        buf.append(node.val) # pre-order
+        buf.append(node.val) 
 
         if node.right != None:
             S.append(node.right)
-
-        #buf.append(node.val) # in-order
-
         if node.left != None:
             S.append(node.left)
-
-        #buf.append(node.val) # post-order
 
     return None
 
 def bfs(root,buf):
+    # also known as level-order
     if root == None:
         return None
 
