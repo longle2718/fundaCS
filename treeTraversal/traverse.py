@@ -2,7 +2,8 @@
 # Unlike graph search probs, each node in a tree 
 # does not have overlapping neighbors.
 # Hence, there is no need to have the explored queue
-# to ensure each node is only visited once.
+# to ensure each node is only visited once (except 
+# for post- and in-order traversal).
 #
 # Long Le <longle1@illinois.edu>
 # University of Illinois
@@ -10,6 +11,30 @@
 
 def dfsPost(root,buf):
     # post-order 
+
+    if root == None:
+        return None
+
+    S = []
+    S.append(root)
+    explored = set()
+    while len(S) > 0:
+        node = S[-1]
+        #print('peek = '+str(node.val))
+
+        if node.right != None and node.right not in explored:
+            S.append(node.right)
+        if node.left != None and node.left not in explored:
+            S.append(node.left)
+
+        if ((node.left == None or node.left in explored) and 
+            (node.right == None or node.right in explored)):
+            buf.append(node.val)
+            explored.add(S.pop())
+            #print('pop = '+str(node.val))
+
+    '''
+    # Wikipedia implementation
     S = []
     node = root
     nodeLast = None
@@ -32,11 +57,34 @@ def dfsPost(root,buf):
                 # at the end
                 buf.append(nodePeek.val)
                 nodeLast = S.pop()
+    '''
 
     return None
 
 def dfsIn(root,buf):
     # in-order
+
+    if root == None:
+        return None
+
+    S = []
+    S.append(root)
+    explored = set() # can be further optimized with just the last node
+    while len(S) > 0:
+        node = S[-1]
+        #print('peek = '+str(node.val))
+
+        if node.left != None and node.left not in explored:
+            S.append(node.left)
+        else:
+            buf.append(node.val)
+            explored.add(S.pop())
+            #print('pop = '+str(node.val))
+            if node.right != None:
+                S.append(node.right)
+
+    '''
+    # Wikipedia implementation
     S = []
     node = root
     # need both the stack and an additional probing node
@@ -51,6 +99,7 @@ def dfsIn(root,buf):
             node = S.pop()
             buf.append(node.val)
             node = node.right
+    '''
 
     return None
 
