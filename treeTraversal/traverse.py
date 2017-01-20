@@ -23,10 +23,10 @@ def dfsPost(root,buf):
             node = node.left
         else:
             nodePeek = S[-1]
-            # if right child exists and node
-            # traversed on the left, then 
+            # if right child exists and it's
+            # not processed yet, then 
             # move right
-            if nodePeek.right != None and nodeLast != nodePeek.right:
+            if nodePeek.right != None and nodePeek.right != nodeLast:
                 node = nodePeek.right
             else:
                 # at the end
