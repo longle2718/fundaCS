@@ -13,16 +13,23 @@ def dfsPost(root,buf):
     S = []
     node = root
     nodeLast = None
-    # need a stack, a probing node, and a last node
+    # need a stack, a probing node, and a last processed/visited node
     while len(S) > 0 or node != None:
+        # at each iteration
+        # may process 1 node
+        # enqueue/probe all possible nodes
         if node != None:
             S.append(node)
             node = node.left
         else:
             nodePeek = S[-1]
+            # if right child exists and node
+            # traversed on the left, then 
+            # move right
             if nodePeek.right != None and nodeLast != nodePeek.right:
                 node = nodePeek.right
             else:
+                # at the end
                 buf.append(nodePeek.val)
                 nodeLast = S.pop()
 
@@ -34,6 +41,9 @@ def dfsIn(root,buf):
     node = root
     # need both the stack and an additional probing node
     while len(S) > 0 or node != None:
+        # at each iteration
+        # may process 1 node
+        # enqueue/probe all possible nodes
         if node != None:
             S.append(node)
             node = node.left
@@ -53,6 +63,9 @@ def dfsPre(root,buf):
     S.append(root)
 
     while len(S) > 0:
+        # at each iteration
+        # process 1 node
+        # enqueue all possible nodes
         node = S.pop()
     
         buf.append(node.val) 
