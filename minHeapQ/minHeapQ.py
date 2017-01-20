@@ -10,6 +10,8 @@ class MinHeapQ:
         self.valMap = {}
 
     def push(self,key,val):
+        # key is an object
+        # val is its priority
         self.valMap[key] = val
 
         self.buf.append(val)
@@ -24,8 +26,8 @@ class MinHeapQ:
         return None
 
     def pop(self):
-        _,rv = self.popitem()
-        return rv
+        rk,_ = self.popitem()
+        return rk
 
     def popitem(self):
         #  extract the root value
