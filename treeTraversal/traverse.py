@@ -27,7 +27,8 @@ def dfsPost(root,buf):
         if ((node.left == None or node.left in explored) and 
             (node.right == None or node.right in explored)):
             buf.append(node.val)
-            explored.add(S.pop())
+            explored.add(node)
+            S.pop()
             #print('pop = '+str(node.val))
 
         if node.right != None and node.right not in explored:
