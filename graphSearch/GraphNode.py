@@ -48,7 +48,8 @@ def deserialize(data,plot=False):
         node = GraphNode(d['val'])
         idx = d['idx']
         nodeMap[idx] = node
-        locMap[node] = (np.cos(idx/V*np.pi*2),np.sin(idx/V*np.pi*2))
+        #locMap[node] = (np.cos(idx/V*np.pi*2),np.sin(idx/V*np.pi*2))
+        locMap[node] = (2*idx/V,np.sin(2*idx/V*np.pi*2))
 
         nodes.add(node)
 
@@ -63,8 +64,6 @@ def deserialize(data,plot=False):
 
     if plot:
         plt.figure()
-        ax = plt.axes()
-        ax.add_artist(plt.Circle((0, 0), 1.,color='k',ls='--',fill=False))
         for node in nodes:
             loc = locMap[node]
             plt.scatter(loc[0],loc[1],lw=32)
@@ -74,7 +73,11 @@ def deserialize(data,plot=False):
                 #plt.arrow(loc[0],loc[1],locNgb[0]-loc[0],locNgb[1]-loc[1],head_width=.1,head_length=.1,fc='k',ec='k')
                 add_arrow(plt.plot([loc[0],locNgb[0]],[loc[1],locNgb[1]])[0])
 
-        plt.axis([-1.2,1.2,-1.2,1.2])
+        #plt.axis([-1.2,1.2,-1.2,1.2])
+        axes = plt.axes()
+        #axes.add_artist(plt.Circle((0, 0), 1.,color='k',ls='--',fill=False))
+        axes.relim()
+        axes.autoscale_view(False,True,True)
         plt.show()
 
     return nodes
