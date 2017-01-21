@@ -49,7 +49,7 @@ def deserialize(data,plot=False):
         idx = d['idx']
         nodeMap[idx] = node
         #locMap[node] = (np.cos(idx/V*np.pi*2),np.sin(idx/V*np.pi*2))
-        locMap[node] = (2*idx/V,np.sin(2*idx/V*np.pi*2))
+        locMap[node] = (5*idx/V,np.sin(5*idx/V*np.pi*2))
 
         nodes.add(node)
 

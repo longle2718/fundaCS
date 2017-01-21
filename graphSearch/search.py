@@ -47,13 +47,13 @@ def hasCycle(aMap,start):
         if node in explored:
             continue
 
+        while len(chain)>0 and node not in getNeighbor(chain[-1],aMap):
+            chain.pop()
         if anyIn(getNeighbor(node,aMap),chain):
             for n in chain:
                 print('n = '+str(n))
             print('node = '+str(node))
             return True
-        while len(chain)>0 and node not in getNeighbor(chain[-1],aMap):
-            chain.pop()
         chain.append(node)
 
         explored.add(node)
@@ -130,15 +130,15 @@ def hasCycle2(nodes,start):
         if node in explored:
             continue
 
+        # maintaining the chain invariance
+        while len(chain)>0 and node not in chain[-1].ngbs:
+            chain.pop()
         # new node bites the chain!
         if anyIn(node.ngbs,chain):
             for n in chain:
                 print('n.val = '+str(n.val))
             print('node.val = '+str(node.val))
             return True
-        # maintaining the chain invariance
-        while len(chain)>0 and node not in chain[-1].ngbs:
-            chain.pop()
         chain.append(node)
 
         explored.add(node)
