@@ -34,10 +34,43 @@ def dfsPre(aMap,start):
 
     return reachable
 
+def hasCycle(aMap,start):
+    M,N = np.shape(aMap)
+    chain = []
+
+    explored = set()
+    frontierS = []
+    frontierS.append(start)
+    while len(frontierS) > 0:
+        node = frontierS.pop()
+
+        if node in explored:
+            continue
+
+        if anyIn(getNeighbor(node,aMap),chain):
+            for n in chain:
+                print('n = '+str(n))
+            print('node = '+str(node))
+            return True
+        while len(chain)>0 and node not in getNeighbor(chain[-1],aMap):
+            chain.pop()
+        chain.append(node)
+
+        explored.add(node)
+
+        for ngb in getNeighbor(node,aMap):
+            if ngb not in explored:
+                frontierS.append(ngb)
+
+    return False
+
 def dfsPost(aMap,start):
     # non recursive implementation
     M,N = np.shape(aMap)
     reachable = []
+    if hasCycle(aMap,start):
+        print('cycle detected')
+        return reachable 
 
     explored = set()
     frontierS = []
@@ -85,9 +118,44 @@ def dfs2Pre(nodes,start):
 
     return reachable
 
+def hasCycle2(nodes,start):
+    chain = []
+
+    explored = set()
+    frontierS = []
+    frontierS.append(start)
+    while len(frontierS) > 0:
+        node = frontierS.pop()
+
+        if node in explored:
+            continue
+
+        # new node bites the chain!
+        if anyIn(node.ngbs,chain):
+            for n in chain:
+                print('n.val = '+str(n.val))
+            print('node.val = '+str(node.val))
+            return True
+        # maintaining the chain invariance
+        while len(chain)>0 and node not in chain[-1].ngbs:
+            chain.pop()
+        chain.append(node)
+
+        explored.add(node)
+
+        # visit neighbors
+        for ngb in node.ngbs:
+            if ngb not in explored:
+                frontierS.append(ngb)
+
+    return False
+
 def dfs2Post(nodes,start):
     # non recursive implementation
     reachable = []
+    if hasCycle2(nodes,start):
+        print('cycle detected')
+        return reachable 
 
     explored = set()
     frontierS = []
@@ -168,6 +236,13 @@ def allIn(nodes,Q):
             return False
 
     return True
+
+def anyIn(nodes,Q):
+    for node in nodes:
+        if node in Q:
+            return True
+
+    return False
 
 def getNeighbor(node,aMap):
     M,N = np.shape(aMap)
