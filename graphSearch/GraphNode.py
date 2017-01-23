@@ -43,11 +43,15 @@ def deserialize(data,plot=False):
         node = GraphNode(d['val'])
         nodeMap[d['idx']] = node
         nodes.add(node)
-
     #print('nodeMap = '+str(nodeMap))
 
     # node to location map
-    locMap = node2locMap(nodes,nodeMap)
+    V = len(nodes)
+    locMap = {}
+    for idx in nodeMap.keys():
+        #locMap[nodeMap[idx]] = (np.cos(idx/V*np.pi*2),np.sin(idx/V*np.pi*2))
+        locMap[nodeMap[idx]] = (4.9*idx/(V-1),np.sin(4.9*idx/(V-1)*np.pi*2))
+    #print('locMap = '+str(locMap))
 
     # adding neighbors
     for d in dicts:
@@ -60,36 +64,16 @@ def deserialize(data,plot=False):
 
     return nodes
 
-def node2locMap(nodes,nodeMap=None):
-    V = len(nodes)
-    if nodeMap == None:
-        # idx to node map
-        nodeMap = {}
-        for idx,node in enumerate(nodes):
-            nodeMap[idx] = node
-
-    #print('nodeMap = '+str(nodeMap))
-
-    locMap = {}
-    for idx in nodeMap.keys():
-        #locMap[nodeMap[idx]] = (np.cos(idx/V*np.pi*2),np.sin(idx/V*np.pi*2))
-        locMap[nodeMap[idx]] = (5*idx/V,np.sin(5*idx/V*np.pi*2))
-
-    #print('locMap = '+str(locMap))
-
-    return locMap
-
-def visualize(nodes,locMap=None):
-    if locMap == None:
-        locMap = node2locMap(nodes)
-
+def visualize(nodes,locMap):
     plt.figure()
     for idx,node in enumerate(nodes):
         loc = locMap[node]
         plt.scatter(loc[0],loc[1],lw=32)
         if isinstance(node.val,int):
+            #print('node.val = '+str(node.val))
             plt.annotate(str(node.val),xy=loc,xytext=(loc[0]+.1,loc[1]+.1),fontsize=15)
         else:
+            #print('idx = '+str(idx))
             plt.annotate(str(idx),xy=loc,xytext=(loc[0]+.1,loc[1]+.1),fontsize=15)
         for ngb in node.ngbs:
             locNgb = locMap[ngb]
