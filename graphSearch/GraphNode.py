@@ -68,6 +68,8 @@ def node2locMap(nodes,nodeMap=None):
         for idx,node in enumerate(nodes):
             nodeMap[idx] = node
 
+    #print('nodeMap = '+str(nodeMap))
+
     locMap = {}
     for idx in nodeMap.keys():
         #locMap[nodeMap[idx]] = (np.cos(idx/V*np.pi*2),np.sin(idx/V*np.pi*2))
@@ -82,10 +84,13 @@ def visualize(nodes,locMap=None):
         locMap = node2locMap(nodes)
 
     plt.figure()
-    for node in nodes:
+    for idx,node in enumerate(nodes):
         loc = locMap[node]
         plt.scatter(loc[0],loc[1],lw=32)
-        plt.annotate(str(node.val),xy=loc,xytext=(loc[0]+.1,loc[1]+.1),fontsize=15)
+        if isinstance(node.val,int):
+            plt.annotate(str(node.val),xy=loc,xytext=(loc[0]+.1,loc[1]+.1),fontsize=15)
+        else:
+            plt.annotate(str(idx),xy=loc,xytext=(loc[0]+.1,loc[1]+.1),fontsize=15)
         for ngb in node.ngbs:
             locNgb = locMap[ngb]
             #plt.arrow(loc[0],loc[1],locNgb[0]-loc[0],locNgb[1]-loc[1],head_width=.1,head_length=.1,fc='k',ec='k')
