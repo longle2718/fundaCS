@@ -55,7 +55,9 @@ def deserialize(data,plot=False):
     for node in nodes:
         v = node.val
         #locMap[node] = (np.cos(v/V*np.pi*2),np.sin(v/V*np.pi*2))
-        locMap[node] = (4.9*v/(V-1),np.sin(4.9*v/(V-1)*np.pi*2))
+        # avoid numerical issue by using non integer multiplier, i.e.
+        # 3.99 instead of 4
+        locMap[node] = (3.99*v/(V-1),np.sin(3.99*v/(V-1)*np.pi*2))
     #print('locMap = '+str(locMap))
 
     if plot:
