@@ -17,12 +17,10 @@ class GraphNode:
 
 def serialize(nodes):
     # input is an array of GraphNodes
-    # map nodes to index integers
+    # node to idx map
     idxMap = {}
-    k = 0
-    for node in nodes:
+    for k,node in enumerate(nodes):
         idxMap[node] = k
-        k += 1
 
     # output is an array of dictionaries
     dicts = []
@@ -39,22 +37,19 @@ def deserialize(data,plot=False):
     dicts = json.loads(data)
     V = len(dicts)
     
-    locMap = {}
     nodeMap = {}
 
-    # creating nodes and filling mappings
+    # creating nodes and idx to node mapping
     nodes = set()
     for d in dicts:
         node = GraphNode(d['val'])
-        idx = d['idx']
-        nodeMap[idx] = node
-        #locMap[node] = (np.cos(idx/V*np.pi*2),np.sin(idx/V*np.pi*2))
-        locMap[node] = (5*idx/V,np.sin(5*idx/V*np.pi*2))
-
+        nodeMap[d['idx']] = node
         nodes.add(node)
 
-    #print('locMap = '+str(locMap))
     #print('nodeMap = '+str(nodeMap))
+
+    # node to location map
+    locMap = node2locMap(nodes,nodeMap)
 
     # adding neighbors
     for d in dicts:
@@ -67,7 +62,26 @@ def deserialize(data,plot=False):
 
     return nodes
 
-def visualize(nodes,locMap):
+def node2locMap(nodes,nodeMap=None):
+    if nodeMap == None:
+        # idx to node map
+        nodeMap = {}
+        for idx,node in enumerate(nodes):
+            nodeMap[idx] = node
+
+    locMap = {}
+    for idx in nodeMap.keys():
+        #locMap[nodeMap[idx]] = (np.cos(idx/V*np.pi*2),np.sin(idx/V*np.pi*2))
+        locMap[nodeMap[idx]] = (5*idx/V,np.sin(5*idx/V*np.pi*2))
+
+    #print('locMap = '+str(locMap))
+
+    return locMap
+
+def visualize(nodes,locMap=None):
+    if locMap == None:
+        locMap = node2locMap(nodes)
+
     plt.figure()
     for node in nodes:
         loc = locMap[node]
