@@ -35,12 +35,10 @@ def serialize(nodes):
 def deserialize(data,plot=False):
     # input is an array of dictionaries
     dicts = json.loads(data)
-    V = len(dicts)
     
-    nodeMap = {}
-
     # creating nodes and idx to node mapping
     nodes = set()
+    nodeMap = {}
     for d in dicts:
         node = GraphNode(d['val'])
         nodeMap[d['idx']] = node
@@ -63,6 +61,7 @@ def deserialize(data,plot=False):
     return nodes
 
 def node2locMap(nodes,nodeMap=None):
+    V = len(nodes)
     if nodeMap == None:
         # idx to node map
         nodeMap = {}
