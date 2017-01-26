@@ -3,8 +3,8 @@
 # In graph search, there is overlapping enqueue because there is
 # overlapping neighbors. To avoid overlapping processing, processed
 # nodes need to be kept tracked by the explored set. Note that
-# the explored set only helps reduce overlapping enqueues (For
-# DFS, some (deeper) overlapping enqueues are actually useful).
+# the explored set only helps remove wasteful overlapping enqueues
+# (Deeper overlapping enqueues are actually required for DFS).
 #
 # Long Le <longle1@illinois.edu>
 # University of Illinois
