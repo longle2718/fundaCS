@@ -53,13 +53,7 @@ def dijkstra(aMap,start,goal):
 def dijkstra_bfs(aMap,start,goal):
     M,N = np.shape(aMap)
     dist = {}
-    for m in range(M):
-        for n in range(N):
-            node = (m,n)
-            if node == start:
-                dist[node] = 0
-            else:
-                dist[node] = np.infty
+    dist[start] = 0
     prev = {}
 
     explored = set()
@@ -74,6 +68,8 @@ def dijkstra_bfs(aMap,start,goal):
             if ngb not in explored:
                 frontierQ.append(ngb)
 
+                if ngb not in dist:
+                    dist[ngb] = np.infty
                 alt = dist[node] + getDist(node,ngb,aMap)
                 if alt < dist[ngb]:
                     dist[ngb] = alt
