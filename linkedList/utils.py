@@ -86,6 +86,25 @@ def hasCycle(l):
         fast = fast.next.next
     return True
 
+def isPalindrome(l):
+    if l == None:
+        return True
+
+    buf = []
+    p = l
+    while p != None:
+        buf.append(p.val)
+        p = p.next
+
+    while len(buf) >= 2:
+        if buf[0] == buf[-1]:
+            buf.pop(0)
+            buf.pop()
+        else:
+            return False
+
+    return True
+
 def intersection(l0,l1):
     if l0 == None or l1 == None:
         return
