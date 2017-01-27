@@ -72,3 +72,36 @@ def mergeTwoLists(l1,l2):
     del tmp
 
     return rv
+
+def hasCycle(l):
+    if l == None or l.next == None:
+        return False
+
+    slow = l
+    fast = l.next
+    while fast != slow:
+        if fast == None or fast.next == None:
+            return False
+        slow = slow.next
+        fast = fast.next.next
+    return True
+
+def intersection(l0,l1):
+    if l0 == None or l1 == None:
+        return
+
+    p = l0
+    q = l1
+    while True:
+        if p == None and q == None:
+            return
+        if p == None:
+            p = l1
+        if q == None:
+            q = l0
+        if p == q:
+            return p
+
+        p = p.next
+        q = q.next
+
