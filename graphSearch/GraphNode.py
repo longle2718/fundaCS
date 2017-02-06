@@ -84,6 +84,7 @@ def visualize(nodes,locMap,field=None):
     #axes.add_artist(plt.Circle((0, 0), 1.,color='k',ls='--',fill=False))
     axes.relim()
     axes.autoscale_view(False,True,True)
+    plt.savefig('vGraph.png')
     plt.show()
     return
 
