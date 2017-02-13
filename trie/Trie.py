@@ -46,8 +46,13 @@ def buildTrie(words):
 
     return root
 
-def preTraverse(root,plot=False):
+def allWords(root,plot=False):
+    # get all words from root
+    # using preorder-DFS
     buf = []
+    stack = []
+    parentVal = {}
+
     locMap = {}
     locMap[root] = (0,0)
     parentMap = {}
@@ -59,20 +64,31 @@ def preTraverse(root,plot=False):
         node = S.pop()
         #print('node.val = %s' % node.val)
         
-        buf.append(node.val)
+        stack.append(node.val)
+        if node.next == None and node.child == None:
+            buf.append(''.join(stack))
+
+            #print('stack = %s' % stack)
+            #print(S) 
+            # pop the stack until the parentVal is met
+            while len(stack) > 0:
+                if len(S) > 0 and parentVal[S[-1].val] == stack[-1]:
+                    stack.pop()
+                    break
+                stack.pop()
 
         if node.next != None:
+            parentVal[node.next.val] = node.val
             height = 5-locMap[node][1]
+
             locMap[node.next] = tuple(np.array(locMap[node])+np.array((5/height,0)))
             parentMap[node.next] = node
             #print('height = %s' % height)
             #print('node.next.val,loc = %s,%s' % (node.next.val,locMap[node.next]))
-
             S.append(node.next)
         if node.child != None:
             locMap[node.child] = tuple(np.array(locMap[node])+np.array((0,-5)))
             parentMap[node.child] = node
-
             S.append(node.child)
 
     if plot:
@@ -87,3 +103,11 @@ def preTraverse(root,plot=False):
         plt.show()
     
     return buf
+
+def autocomplete(root,word):
+    prefix = []
+    node = root
+    for c in word:
+        a
+
+    return
