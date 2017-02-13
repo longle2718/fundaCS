@@ -36,19 +36,19 @@ def deserialize(data,plot=False):
     buf = data.split(',')
     del buf[-1]
 
-    # create a dummy node 
-    # this is a must in python to update references
-    # inside an object due to the lack of pointers
-    root = TreeNode(-1)
-    S = []
-    S.append(root)
-
     locMap = {}
     locMap[root] = (0,0)
     heightMap = {}
     heightMap[root] = 0
     parentMap = {}
     parentMap[root] = None
+
+    # create a dummy node 
+    # this is a must in python to update references
+    # inside an object due to the lack of pointers
+    root = TreeNode(-1)
+    S = []
+    S.append(root)
 
     while len(S) > 0:
         node = S.pop()
