@@ -6,6 +6,9 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import os,sys
+sys.path.append(os.path.expanduser('~')+'/randProbs/graphSearch')
+from GraphNode import add_arrow
 
 class TrieNode:
     def __init__(self,x):
@@ -59,15 +62,15 @@ def preTraverse(root,plot=False):
         buf.append(node.val)
 
         if node.next != None:
-            height = 1-locMap[node][1]
-            locMap[node.next] = tuple(np.array(locMap[node])+np.array((1/height/2,0)))
+            height = 5-locMap[node][1]
+            locMap[node.next] = tuple(np.array(locMap[node])+np.array((5/height,0)))
             parentMap[node.next] = node
             #print('height = %s' % height)
             #print('node.next.val,loc = %s,%s' % (node.next.val,locMap[node.next]))
 
             S.append(node.next)
         if node.child != None:
-            locMap[node.child] = tuple(np.array(locMap[node])+np.array((0,-1)))
+            locMap[node.child] = tuple(np.array(locMap[node])+np.array((0,-5)))
             parentMap[node.child] = node
 
             S.append(node.child)
@@ -76,9 +79,11 @@ def preTraverse(root,plot=False):
         for node,loc in locMap.items():
             #print('node.val,loc = %s,%s' % (node.val,loc))
             plt.annotate(str(node.val),xy=loc,size=18)
+            plt.scatter(loc[0],loc[1],lw=32)
             if parentMap[node] in locMap:
                 locParent = locMap[parentMap[node]]
-                plt.plot([locParent[0],loc[0]],[locParent[1],loc[1]],marker='o',markersize=18)
+                #plt.plot([locParent[0],loc[0]],[locParent[1],loc[1]],marker='o',markersize=18)
+                add_arrow(plt.plot([locParent[0],loc[0]],[locParent[1],loc[1]])[0])
         plt.show()
     
     return buf
