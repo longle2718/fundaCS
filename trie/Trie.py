@@ -58,15 +58,16 @@ def allWords(root,plot=False):
         N = len(node.children)
         idx = 0
         for child in node.children:
-            width = 1/2**(-locMap[node][1]/4)
+            width = 1/2**(-locMap[node][1]/2)
             if N%2 == 0:
                 x = (idx-width/2)*width/(N-1)
+                idx += width/(N-1)
             else:
                 x = (idx-width/2)*width/N
-            idx += 1
+                idx += width/N
 
             locMap[child] = tuple(np.array(locMap[node])+np.array((x,-1)))
-            print('child.val,loc = %s,%s' % (child.val,locMap[child]))
+            #print('child.val,loc = %s,%s' % (child.val,locMap[child]))
             S.append(child)
 
     if plot:
@@ -85,25 +86,13 @@ def allWords(root,plot=False):
     return buf
 
 def autocomplete(root,word):
-    prefix = []
     node = root
-    for c in word:
-        # find vertically
-        if node.val == c:
-            node = node.child
+    for i in range(len(word)):
+        aChild = findIn(node.children,word[:i+1])
+        if aChild == None:
+            break
         else:
-            # find horizontally
-            tmp = node
-            while tmp!= None:
-                if tmp.val == c:
-                    node = tmp
-                    break
-                tmp = tmp.next
+            node = aChild
+    #print('node.val = %s' % node.val)
 
-            # form the result
-            rv = []
-            for postfix in allWords(node):
-                rv.append(word+postfix[1:])
-            return rv
-
-    return word
+    return allWords(node)
