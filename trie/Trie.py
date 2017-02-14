@@ -21,19 +21,17 @@ def buildTrie(words):
 
     for word in words:
         node = root
-        for c in word:
+        for i in range(len(word)):
             if node.child == None:
                 # move node vertically
-                node.child = TrieNode(c)
+                node.child = TrieNode(word[:i+1])
                 node = node.child
             else:
                 node = node.child
                 # move node horizontally
-                while True:
-                    if node.val == c:
-                        break
+                while node.val[-1] != word[i]:
                     if node.next == None:
-                        node.next = TrieNode(c)
+                        node.next = TrieNode(word[:i+1])
                         node = node.next
                         break
                     node = node.next
@@ -50,8 +48,6 @@ def allWords(root,plot=False):
     # get all words from root
     # using preorder-DFS
     buf = []
-    stack = []
-    parentVal = {}
 
     locMap = {}
     locMap[root] = (0,0)
@@ -64,34 +60,25 @@ def allWords(root,plot=False):
         node = S.pop()
         #print('node.val = %s' % node.val)
         
-        stack.append(node.val)
-        if node.next == None and node.child == None:
-            buf.append(''.join(stack))
-
-            #print('stack = %s' % stack)
-            #print(S) 
-            # pop the stack until the parentVal is met
-            while len(stack) > 0:
-                if len(S) > 0 and parentVal[S[-1].val] == stack[-1]:
-                    stack.pop()
-                    break
-                stack.pop()
+        if node.child == None:
+            buf.append(node.val)
 
         if node.next != None:
-            parentVal[node.next.val] = node.val
-            height = 5-locMap[node][1]
-
-            locMap[node.next] = tuple(np.array(locMap[node])+np.array((5/height,0)))
+            height = 1-locMap[node][1]
+            locMap[node.next] = tuple(np.array(locMap[node])+np.array((1/height,0)))
             parentMap[node.next] = node
             #print('height = %s' % height)
             #print('node.next.val,loc = %s,%s' % (node.next.val,locMap[node.next]))
+
             S.append(node.next)
         if node.child != None:
-            locMap[node.child] = tuple(np.array(locMap[node])+np.array((0,-5)))
+            locMap[node.child] = tuple(np.array(locMap[node])+np.array((0,-1)))
             parentMap[node.child] = node
+
             S.append(node.child)
 
     if plot:
+        plt.figure(figsize=(12, 8), dpi= 80, facecolor='w', edgecolor='k')
         for node,loc in locMap.items():
             #print('node.val,loc = %s,%s' % (node.val,loc))
             plt.annotate(str(node.val),xy=loc,size=18)
@@ -108,6 +95,22 @@ def autocomplete(root,word):
     prefix = []
     node = root
     for c in word:
-        a
+        # find vertically
+        if node.val == c:
+            node = node.child
+        else:
+            # find horizontally
+            tmp = node
+            while tmp!= None:
+                if tmp.val == c:
+                    node = tmp
+                    break
+                tmp = tmp.next
 
-    return
+            # form the result
+            rv = []
+            for postfix in allWords(node):
+                rv.append(word+postfix[1:])
+            return rv
+
+    return word
