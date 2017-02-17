@@ -82,9 +82,12 @@ def visualize(nodes,locMap,field=None):
     #plt.axis([-1.2,1.2,-1.2,1.2])
     axes = plt.axes()
     #axes.add_artist(plt.Circle((0, 0), 1.,color='k',ls='--',fill=False))
-    axes.relim()
-    axes.autoscale_view(False,True,True)
-    plt.savefig('vGraph.png')
+    #axes.relim()
+    #axes.autoscale_view(False,True,True)
+    axes.axison=False
+    axes.get_xaxis().set_visible(False)
+    axes.get_yaxis().set_visible(False)
+    plt.savefig('vGraph.png', bbox_inches='tight', pad_inches=0)
     plt.show()
     return
 
