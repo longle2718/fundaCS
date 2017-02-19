@@ -11,16 +11,9 @@ sys.path.append(os.path.expanduser('~')+'/randProbs/graphSearch')
 from GraphNode import add_arrow
 
 class TrieNode:
-    def __init__(self,x):
-        self.val = x
-        self.children = set()
-
-def findIn(children, val):
-    for child in children:
-        if child.val == val:
-            return child
-
-    return None
+    def __init__(self,val):
+        self.childMap = {} # char to child node map
+        self.val = val # accumulated edge char
 
 def buildTrie(words):
     root = TrieNode('$') # required dummy node
@@ -28,13 +21,9 @@ def buildTrie(words):
     for word in words:
         node = root
         for i in range(len(word)):
-            aChild = findIn(node.children,word[:i+1])
-            if aChild == None:
-                newNode = TrieNode(word[:i+1])
-                node.children.add(newNode)
-                node = newNode
-            else:
-                node = aChild
+            if word[i] not in node.childMap:
+                node.childMap[word[i]] = TrieNode(word[:i+1])
+            node = node.childMap[word[i]]
 
     return root
 
@@ -52,12 +41,12 @@ def allWords(root,plot=False):
         node = S.pop()
         #print('node.val = %s' % node.val)
         
-        if len(node.children) == 0:
+        if len(node.childMap) == 0:
             buf.append(node.val)
 
-        N = len(node.children)
+        N = len(node.childMap)
         idx = 0
-        for child in node.children:
+        for _,child in node.childMap.items():
             width = 1/2**(-locMap[node][1]/2)
             if N%2 == 0:
                 x = (idx-width/2)*width/(N-1)
@@ -76,7 +65,7 @@ def allWords(root,plot=False):
             #print('node.val,loc = %s,%s' % (node.val,loc))
             plt.annotate(str(node.val),xy=loc,size=18)
             plt.scatter(loc[0],loc[1],lw=32)
-            for child in node.children:
+            for _,child in node.childMap.items():
                 if child in locMap:
                     locChild = locMap[child]
                     #plt.plot([loc[0],locChild[0]],[loc[1],locChild[1]],marker='o',markersize=18)
@@ -88,11 +77,10 @@ def allWords(root,plot=False):
 def autocomplete(root,word):
     node = root
     for i in range(len(word)):
-        aChild = findIn(node.children,word[:i+1])
-        if aChild == None:
+        if word[i] not in node.childMap:
             break
         else:
-            node = aChild
+            node = node.childMap[word[i]]
     #print('node.val = %s' % node.val)
 
     return allWords(node)
