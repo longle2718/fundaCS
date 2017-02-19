@@ -65,11 +65,11 @@ def allWords(root,plot=False):
             #print('node.val,loc = %s,%s' % (node.val,loc))
             plt.annotate(str(node.val),xy=loc,size=18)
             plt.scatter(loc[0],loc[1],lw=32)
-            for _,child in node.childMap.items():
+            for char,child in node.childMap.items():
                 if child in locMap:
                     locChild = locMap[child]
                     #plt.plot([loc[0],locChild[0]],[loc[1],locChild[1]],marker='o',markersize=18)
-                    add_arrow(plt.plot([loc[0],locChild[0]],[loc[1],locChild[1]])[0])
+                    add_arrow(plt.plot([loc[0],locChild[0]],[loc[1],locChild[1]])[0],label=char)
         plt.show()
     
     return buf

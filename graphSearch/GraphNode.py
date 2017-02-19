@@ -91,7 +91,7 @@ def visualize(nodes,locMap,field=None):
     plt.show()
     return
 
-def add_arrow(line,size=20,color=None):
+def add_arrow(line,size=20,color=None,label=None):
     if color is None:
         color = line.get_color()
 
@@ -116,3 +116,6 @@ def add_arrow(line,size=20,color=None):
         arrowprops=dict(arrowstyle='-|>',color=color),
         size=size
     )
+    if label is not None:
+        line.axes.annotate(label,
+                xy=((xEnd+xStart)/2,(yEnd+yStart)/2),size=18)
