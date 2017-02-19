@@ -12,8 +12,8 @@ from GraphNode import add_arrow
 
 class TrieNode:
     def __init__(self,val):
-        self.childMap = {} # char to child node map
         self.val = val # accumulated edge char
+        self.childMap = {} # char to child node map
 
 def buildTrie(words):
     root = TrieNode('$') # required dummy node
