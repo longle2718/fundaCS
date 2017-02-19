@@ -1,7 +1,34 @@
-'''
-Substrings related utilities.
-The common template.
+# Strings related utilities.
+#
+# Long Le <longle1@illinois.edu>
+# University of Illinois
+#
 
+import numpy as np
+
+# compute the Levenshtein distance between
+# two strings using Wagner-Fischer algorithm
+def levenshteinDist(a,b):
+    aN = len(a)
+    bN = len(b)
+    D = np.zeros((aN,bN))
+    for k in range(aN):
+        for l in range(bN):
+            if min(k,l) == 0:
+                D[k,l] = max(k,l) # deletion/insertion
+            else:
+                if a[k-1] != b[l-1]:
+                    ind = 1
+                else:
+                    ind = 0
+                D[k,l] = min([D[k-1,l]+1, # deletion
+                              D[k,l-1]+1, # insertion
+                              D[k-1,l-1]+ind]) # substitution
+    return D[aN-1,bN-1] 
+
+#The common template for substring problems.
+#Inspired by Dijkstra.
+'''
 def findSubstring(s):
     cntMap = {} # check whether the substring is valid
     # the analog of initializing the queue
@@ -33,11 +60,7 @@ def findSubstring(s):
         # update d here if finding maximum
 
     return d
-
-Long Le <longle1@illinois.edu>
-University of Illinois
 '''
-
 def anagramSubstr(s,p):
     rv = []
     if s==None or len(s)==0 or p==None or len(p)==0:
