@@ -4,6 +4,8 @@
 # University of Illinois
 #
 
+import numpy as np
+
 def reverseBits(x):
     mask = 1
     rx = 0
@@ -48,10 +50,10 @@ def ffs(x):
     if x == 0:
         return 0
     mask = 1
-    cnt = 1
+    cnt = 0
     while x & mask == 0:
         mask <<= 1
-        cnt <<= 1
+        cnt += 1
     return cnt
 
 def ffs_table(x):
@@ -72,9 +74,28 @@ def ctz(x):
     # count trailing zero == find first set
     # count the # of zeros following the LS 1
     # using de Bruijn sequences
-    table = [( 0x077CB531 * (1<<i) ) >> 27 for i in range(32)]
+    table = {(( (1<<i) * 0x077CB531 ) >> 27):i for i in range(32)}
     # x & (-x) isolates the LS 1
     return table[((x & (-x)) * 0x077CB531) >> 27]
+
+def ctz_bs(x):
+    # binary search
+    nB = 32
+    if x == 0:
+        return nB
+
+    cnt = 0
+    mask = 0x0000FFFF
+    maskN = int(nB//2)
+    for k in range(int(np.log2(nB))):
+        if x & mask == 0:
+            cnt += maskN
+            x >>= maskN
+        maskN //= 2
+        #print('maskN = %s' % maskN)
+        mask >>= maskN
+
+    return cnt 
 
 def clz(x):
     # count leading zero
@@ -82,12 +103,14 @@ def clz(x):
     if x == 0:
         return 32
 
+    # index map for indices 0,1,...,15
     table = [4, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
     cnt = 0
     while True:
+        #print('cnt = %d' % cnt)
         if x & 0xF0000000 != 0:
+            #print('cnt + table = %d' % (cnt+table[x>>28]))
             return cnt + table[x >> (32-4)]
         x <<= 4
         cnt += 4
 
-    return
