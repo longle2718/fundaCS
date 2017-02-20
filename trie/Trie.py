@@ -46,7 +46,7 @@ def allWords(root,plot=False):
 
         N = len(node.childMap)
         idx = 0
-        for _,child in node.childMap.items():
+        for child in node.childMap.values():
             width = 1/2**(-locMap[node][1]/2)
             if N%2 == 0:
                 x = (idx-width/2)*width/(N-1)
