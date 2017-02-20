@@ -42,3 +42,52 @@ def numOf1s(x):
         cnt += 1
         x = x&(x-1)
     return cnt
+
+def ffs(x):
+    # find first set/one
+    if x == 0:
+        return 0
+    mask = 1
+    cnt = 1
+    while x & mask == 0:
+        mask <<= 1
+        cnt <<= 1
+    return cnt
+
+def ffs_table(x):
+    # time-space tradeoff with assistant tables
+    if x == 0:
+        return 0
+
+    n = 8
+    table = [ffs(i) for i in range(2**8)]
+    cnt = 0
+    while True:
+        if x & (2**n-1) != 0:
+            return cnt + table[x & (2**n-1)]
+        x >>= n
+        cnt += n
+
+def ctz(x):
+    # count trailing zero == find first set
+    # count the # of zeros following the LS 1
+    # using de Bruijn sequences
+    table = [( 0x077CB531 * (1<<i) ) >> 27 for i in range(32)]
+    # x & (-x) isolates the LS 1
+    return table[((x & (-x)) * 0x077CB531) >> 27]
+
+def clz(x):
+    # count leading zero
+    # count the # of zeros preceding the MS 1
+    if x == 0:
+        return 32
+
+    table = [4, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0]
+    cnt = 0
+    while True:
+        if x & 0xF0000000 != 0:
+            return cnt + table[x >> (32-4)]
+        x <<= 4
+        cnt += 4
+
+    return
