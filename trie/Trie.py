@@ -1,4 +1,4 @@
-# Trie Node class
+# Trie (Prefix Tree) Node class
 #
 # Long Le
 # University of Illinois
