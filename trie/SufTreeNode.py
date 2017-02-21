@@ -16,7 +16,8 @@ class SufTreeNode:
         self.val = val # accumulated edge char
         self.childMap = {} # char to child node map
 
-# Suffix tree construction using McCreight algorithm in O(n).
+# First suffix tree construction algorithm in O(n)
+# is by McCreight.
 #
 # For online construction, there is Ukkonen algorithm with 
 # O(n) for constant-size alphabet, and
