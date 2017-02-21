@@ -26,9 +26,14 @@ class SufTreeNode:
 # For O(n) in general alphabet, there is Farach algorithm.
 #
 def buildSufTree(words):
+    # using McCreight
     root = SufTreeNode('$')
 
+    node = root
     for word in words:
-        node = root
+        for k in range(len(word)):
+            suf = word[k:]
+            for 
+            node.childMap[] = SufTreeNode()
 
     return root
