@@ -27,6 +27,9 @@ class SufTreeNode:
 #
 def buildSufTree(words):
     # using McCreight ideas
+    # Reference:
+    # [1] http://wind.in.tum.de/seminare/textalgo/WS0203/Izamski.pdf
+    # [2] http://users-birc.au.dk/cstorm/courses/StrAlg_f12/slides/suffix-tree-construction.pdf
     root = SufTreeNode('$')
     head = ''
 
@@ -41,6 +44,7 @@ def buildSufTree(words):
                 else:
                     break
 
+            print('head = %s' % head)
             if head == '':
                 root.childMap[suf] = SufTreeNode(suf)
             else:
@@ -52,10 +56,16 @@ def buildSufTree(words):
 def getHead(sufi,sufj,sIdx=0):
     # get head, i.e. the longest prefix, of sufi
     #print('sufi = %s, sufj = %s' % (sufi,sufj))
-    for k in range(sIdx,min(len(sufi),len(sufj))):
+    if sufi[sIdx] != sufj[sIdx]:
+        return ''
+
+    rv = sufi[sIdx]
+    for k in range(sIdx+1,min(len(sufi),len(sufj))):
         if sufi[k] != sufj[k]:
             break
-    return sufi[:k]
+        else:
+            rv += sufi[k]
+    return rv
 
 def getTail(suf,head):
     return suf[len(head):]
