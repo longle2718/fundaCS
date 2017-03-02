@@ -85,13 +85,13 @@ def visualize(nodes,locMap,field=None):
     #axes.relim()
     #axes.autoscale_view(False,True,True)
     axes.axison=False
-    axes.get_xaxis().set_visible(False)
-    axes.get_yaxis().set_visible(False)
+    #axes.get_xaxis().set_visible(False)
+    #axes.get_yaxis().set_visible(False)
     plt.savefig('vGraph.png', bbox_inches='tight', pad_inches=0)
     plt.show()
     return
 
-def add_arrow(line,size=20,color=None,label=None):
+def add_arrow(line,label=None,size=20,color=None):
     if color is None:
         color = line.get_color()
 
