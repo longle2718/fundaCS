@@ -24,23 +24,28 @@ def Prim(nodes,edges):
     for node in nodes:
         C[node] = np.infty
         E[node] = None
-    F = set() # forest
+    # forest
+    nodesF = set()
+    edgesF = set()
 
     while len(C) > 0:
         node = C.pop()
 
-        nodeNew = Node(node.val)
+        nodesF.add(node)
         if E[node] != None:
-            nodeNew.edges[E[node]] 
-        F.add(nodeNew)
+            edgesF.add(E[node])
 
-        for ngb in node.edges.keys():
-            if ngb in C:
-                if node.edges[ngb] < C[ngb]:
-                    C[ngb] = node.edges[ngb]
-                    E[ngb] = node
+        for edge in edges:
+            for ePt in edge.ePts:
+                if ePt == node:
+                    # diff between sets, then pop out the item
+                    ngb = edge.ePts.difference(set([node])).pop()
+                    if ngb in C:
+                        if edge.w < C[ngb]:
+                            C[ngb] = edge.w
+                            E[ngb] = edge
 
-    return F
+    return nodesF,edgesF
 
 def Kruskal(nodes,edges):
     # https://en.wikipedia.org/wiki/Kruskal's_algorithm
