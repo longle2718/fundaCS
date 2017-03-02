@@ -17,6 +17,26 @@ class Edge:
         self.ePts = set([n0,n1]) # end points
         self.w = w # weight
 
+# union-find set
+class UnionFindSet:
+    def __init__(self,iterable):
+        self.memMap = {} # membership map
+        self.id = 0 # membership ID
+        for item in iterable:
+            self.memMap[item] = self.id
+            self.id += 1
+
+    def find(self,a):
+        return self.memMap.get(a,None)
+
+    def union(self,a,b):
+        aId = self.memMap[a]
+        bId = self.memMap[b]
+        for key,val in self.memMap.items():
+            if val == aId or val == bId:
+                self.memMap[key] = self.id # new id
+        self.id += 1
+
 def Prim(nodes,edges):
     # https://en.wikipedia.org/wiki/Prim's_algorithm
 
@@ -35,14 +55,18 @@ def Prim(nodes,edges):
             edgesF.add(E[node])
 
         for edge in edges:
-            for ePt in edge.ePts:
-                if ePt == node:
-                    # diff between sets, then pop out the item
-                    ngb = edge.ePts.difference(set([node])).pop()
-                    if ngb in C:
-                        if edge.w < C[ngb]:
-                            C[ngb] = edge.w
-                            E[ngb] = edge
+            u,v = edge.ePts
+            if u == node:  
+                ngb = v
+            elif v == node:
+                ngb = u
+            else:
+                continue
+
+            if ngb in C:
+                if edge.w < C[ngb]:
+                    C[ngb] = edge.w
+                    E[ngb] = edge
 
     return edgesF
 
@@ -50,15 +74,20 @@ def Kruskal(nodes,edges):
     # https://en.wikipedia.org/wiki/Kruskal's_algorithm
 
     # sort all edges in non-decreasing order of weights
-    C = minpq()
+    edgesSort = minpq()
     for edge in edges:
-        C[edge] = edge.w
-
+        edgesSort[edge] = edge.w
     edgesF = set()
 
-    for k in range(len(nodes)-1):
-        edge = C.pop()
-        
+    ufset = UnionFindSet(nodes)
+
+    for edge in edgesSort.popkeys():
+        if len(edgesF) == len(nodes)-1:
+            break
+        u,v = edge.ePts
+        if ufset.find(u) != ufset.find(v):
+            edgesF.add(edge)
+            ufset.union(u,v)
 
     return edgesF
 
@@ -69,11 +98,11 @@ def visualize(nodes,edges,locMap):
         plt.scatter(loc[0],loc[1],lw=32)
         plt.annotate(str(node.val),xy=loc,xytext=(loc[0]+.1,loc[1]+.1),fontsize=15)
     for edge in edges:
-        loc = []
-        for ePt in edge.ePts:
-            loc.append(locMap[ePt])
+        u,v =  edge.ePts
+        locU = locMap[u]
+        locV = locMap[v]
         #print('loc = %s' % loc)
-        add_label(plt.plot([loc[0][0],loc[1][0]],[loc[0][1],loc[1][1]])[0],'%.2f' % edge.w)
+        add_label(plt.plot([locU[0],locV[0]],[locU[1],locV[1]])[0],'%.2f' % edge.w)
 
     axes = plt.axes()
     axes.axison=False
