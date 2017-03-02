@@ -13,9 +13,24 @@ class Node:
         self.edges = {}
 
 def Prim(nodes):
-    return
+    # https://en.wikipedia.org/wiki/Prim's_algorithm
+    C = {}
+    for node in nodes:
+        C[node] = np.infty
+    E = {}
+    for node in nodes:
+        E[node] = None
+
+    F = set()
+    Q = 
+    F.add(nodes[0])
+    for node in tree:
+
+
+    return tree
 
 def Kruskal(nodes):
+    # https://en.wikipedia.org/wiki/Kruskal's_algorithm
     return
 
 def visualize(nodes,locMap):
