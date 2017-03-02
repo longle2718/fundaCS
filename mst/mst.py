@@ -19,19 +19,18 @@ class Edge:
 
 def Prim(nodes,edges):
     # https://en.wikipedia.org/wiki/Prim's_algorithm
+
     C = minpq() # cheapest cost of a connection to a node
     E = {} # the edge providing that cheapest connection
     for node in nodes:
         C[node] = np.infty
         E[node] = None
     # forest
-    nodesF = set()
     edgesF = set()
 
     while len(C) > 0:
         node = C.pop()
 
-        nodesF.add(node)
         if E[node] != None:
             edgesF.add(E[node])
 
@@ -45,11 +44,23 @@ def Prim(nodes,edges):
                             C[ngb] = edge.w
                             E[ngb] = edge
 
-    return nodesF,edgesF
+    return edgesF
 
 def Kruskal(nodes,edges):
     # https://en.wikipedia.org/wiki/Kruskal's_algorithm
-    return
+
+    # sort all edges in non-decreasing order of weights
+    C = minpq()
+    for edge in edges:
+        C[edge] = edge.w
+
+    edgesF = set()
+
+    for k in range(len(nodes)-1):
+        edge = C.pop()
+        
+
+    return edgesF
 
 def visualize(nodes,edges,locMap):
     plt.figure(figsize=(10,10))
