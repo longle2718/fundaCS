@@ -66,7 +66,7 @@ def deserialize(data,plot=False):
     return nodes
 
 def visualize(nodes,locMap,field=None):
-    plt.figure()
+    plt.figure(figsize=(10,10))
     for node in nodes:
         loc = locMap[node]
         plt.scatter(loc[0],loc[1],lw=32)
