@@ -65,7 +65,7 @@ def deserialize(data,plot=False):
 
     return nodes
 
-def visualize(nodes,locMap,field=None,figsize=(10,10)):
+def visualize(nodes,locMap,field=None,figsize=(10,10),filename='vGraph.png'):
     plt.figure(figsize=figsize)
     for node in nodes:
         loc = locMap[node]
@@ -87,7 +87,7 @@ def visualize(nodes,locMap,field=None,figsize=(10,10)):
     axes.axison=False
     #axes.get_xaxis().set_visible(False)
     #axes.get_yaxis().set_visible(False)
-    plt.savefig('vGraph.png', bbox_inches='tight', pad_inches=0)
+    plt.savefig(filename, bbox_inches='tight', pad_inches=0)
     plt.show()
     return
 
