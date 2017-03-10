@@ -71,9 +71,9 @@ def visualize(nodes,locMap,field=None,figsize=(10,10),filename='vGraph.png'):
         loc = locMap[node]
         plt.scatter(loc[0],loc[1],lw=32)
         if field in node.val:
-            plt.annotate(str(node.val[field]),xy=loc,xytext=(loc[0],loc[1]),fontsize=15)
+            plt.annotate(str(node.val[field]),xy=loc,xytext=(loc[0],loc[1]),fontsize=25)
         else:
-            plt.annotate(str(node.val),xy=loc,xytext=(loc[0]+.1,loc[1]+.1),fontsize=15)
+            plt.annotate(str(node.val),xy=loc,xytext=(loc[0]+.1,loc[1]+.1),fontsize=25)
         for ngb in node.ngbs:
             locNgb = locMap[ngb]
             #plt.arrow(loc[0],loc[1],locNgb[0]-loc[0],locNgb[1]-loc[1],head_width=.1,head_length=.1,fc='k',ec='k')
