@@ -48,7 +48,7 @@ def dijkstra(aMap,start,goal):
     
     return None,None
 
-# no priority queue, only optimal for uniform dist
+# without a priority queue, can only dequeue the first-come node (which is the same as the nearest node for uniform edge)
 # BFS the whole map
 def dijkstra_bfs(aMap,start,goal):
     M,N = np.shape(aMap)
@@ -56,14 +56,17 @@ def dijkstra_bfs(aMap,start,goal):
     dist[start] = 0
     prev = {}
 
-    explored = set()
     frontierQ = []
     frontierQ.append(start)
+    explored = set()
     while len(frontierQ) > 0:
+        # dequeue
         node = frontierQ.pop(0)
         
+        # enqueue
         explored.add(node)
 
+        # visit neighbors
         for ngb in getNeighbor(node,M,N):
             if ngb not in explored:
                 frontierQ.append(ngb)
@@ -77,7 +80,7 @@ def dijkstra_bfs(aMap,start,goal):
 
     return getPath(goal,prev),dist[goal],explored
 
-# with a priority queue, greedy is optimal
+# with a priority queue, greedy (dequeuing the nearest node first) is optimal
 def dijkstra_ucs(aMap,start,goal):
     # uniform cost search: works for inf maps
     M,N = np.shape(aMap)
