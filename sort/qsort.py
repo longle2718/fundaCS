@@ -26,7 +26,7 @@ def merge(A,iS,iM,iE):
 	i = iS
 	j = iM
 	for k in range(iS,iE):
-		# only one subset or both, in which the smaller is taken
+		# only one subset is left or both are left, in which case the smaller is taken
 		if j >= iE or (i < iM and A[i] <= A[j]):
 			B[k] = A[i]
 			i += 1
