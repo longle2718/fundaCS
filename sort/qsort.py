@@ -49,9 +49,9 @@ def pivotSort(A):
 
 def recurPivotSort(A,iS,iE):
 	if iS < iE-1:
-		p = partition(A,iS,iE)
-		recurPivotSort(A,iS,p) # iS,...,p-1
-		recurPivotSort(A,p+1,iE) # p+1,...,iE-1
+		ip = partition(A,iS,iE)
+		recurPivotSort(A,iS,ip) # iS,...,p-1
+		recurPivotSort(A,ip+1,iE) # p+1,...,iE-1
 	return
 
 def partition(A,iS,iE):
