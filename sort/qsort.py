@@ -52,18 +52,18 @@ def mergeTwoLists(self, l1, l2):
         return l1 or l2
 
 #############################
-def pivotSort(A):
+def partitionSort(A):
 	'''
-	The pivot sort base function
+	The partition sort base function
 	'''
-	recurPivotSort(A,0,len(A))
+	recurPartitionSort(A,0,len(A))
 	return A
 
-def recurPivotSort(A,iS,iE):
+def recurPartitionSort(A,iS,iE):
 	if iS < iE-1:
 		ip = partition(A,iS,iE)
-		recurPivotSort(A,iS,ip) # iS,...,p-1
-		recurPivotSort(A,ip+1,iE) # p+1,...,iE-1
+		recurPartitionSort(A,iS,ip) # iS,...,p-1
+		recurPartitionSort(A,ip+1,iE) # p+1,...,iE-1
 	return
 
 def partition(A,iS,iE):
@@ -91,8 +91,8 @@ if __name__ == '__main__':
 	print(sA)
 
 	sTime = time.time()
-	sA = pivotSort([8,4,2,5,6,9,2,1,11,25,23,10,40,33,32,31,28])
-	#sA = pivotSort([3,4,2])
+	sA = partitionSort([8,4,2,5,6,9,2,1,11,25,23,10,40,33,32,31,28])
+	#sA = partitionSort([3,4,2])
 	#print('elapsed time = '+str(time.time()-sTime))
 	print('elapsed time = %s' % (time.time()-sTime))
 	print(sA)
