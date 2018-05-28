@@ -60,10 +60,11 @@ def partitionSort(A):
 	return A
 
 def recurPartitionSort(A,iS,iE):
-	if iS < iE-1:
-		ip = partition(A,iS,iE)
-		recurPartitionSort(A,iS,ip) # iS,...,p-1
-		recurPartitionSort(A,ip+1,iE) # p+1,...,iE-1
+	if iS >= iE-1:
+		return
+	ip = partition(A,iS,iE)
+	recurPartitionSort(A,iS,ip) # iS,...,p-1
+	recurPartitionSort(A,ip+1,iE) # p+1,...,iE-1
 	return
 
 def partition(A,iS,iE):
