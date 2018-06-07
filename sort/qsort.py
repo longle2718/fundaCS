@@ -26,7 +26,7 @@ def merge(A,iS,iM,iE):
 	i = iS
 	j = iM
 	for k in range(iS,iE):
-		# only one subset or both, in which the smaller is taken
+		# only one subset is left or both are left, in which case the smaller is taken
 		if j >= iE or (i < iM and A[i] <= A[j]):
 			B[k] = A[i]
 			i += 1
@@ -39,19 +39,32 @@ def copy(A,iS,iE,B):
 	for k in range(iS,iE):
 		A[k] = B[k]
 
+def mergeTwoLists(self, l1, l2):
+        """
+        :type l1: ListNode
+        :type l2: ListNode
+        :rtype: ListNode
+        """
+        if l1 and l2:
+            if l1.val > l2.val:
+                l1,l2 = l2,l1
+            l1.next = self.mergeTwoLists(l1.next,l2)
+        return l1 or l2
+
 #############################
-def pivotSort(A):
+def partitionSort(A):
 	'''
-	The pivot sort base function
+	The partition sort base function
 	'''
-	recurPivotSort(A,0,len(A))
+	recurPartitionSort(A,0,len(A))
 	return A
 
-def recurPivotSort(A,iS,iE):
-	if iS < iE-1:
-		p = partition(A,iS,iE)
-		recurPivotSort(A,iS,p) # iS,...,p-1
-		recurPivotSort(A,p+1,iE) # p+1,...,iE-1
+def recurPartitionSort(A,iS,iE):
+	if iS >= iE-1:
+		return
+	ip = partition(A,iS,iE)
+	recurPartitionSort(A,iS,ip) # iS,...,p-1
+	recurPartitionSort(A,ip+1,iE) # p+1,...,iE-1
 	return
 
 def partition(A,iS,iE):
@@ -79,8 +92,8 @@ if __name__ == '__main__':
 	print(sA)
 
 	sTime = time.time()
-	sA = pivotSort([8,4,2,5,6,9,2,1,11,25,23,10,40,33,32,31,28])
-	#sA = pivotSort([3,4,2])
+	sA = partitionSort([8,4,2,5,6,9,2,1,11,25,23,10,40,33,32,31,28])
+	#sA = partitionSort([3,4,2])
 	#print('elapsed time = '+str(time.time()-sTime))
 	print('elapsed time = %s' % (time.time()-sTime))
 	print(sA)
