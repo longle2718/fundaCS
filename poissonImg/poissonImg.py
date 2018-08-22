@@ -6,6 +6,7 @@ Long Le <longle2718@gmail.com>
 
 import numpy as np
 from scipy.sparse import linalg as linalg
+#from scipy.sparse import csr_matrix as csr_matrix
 from scipy.sparse import lil_matrix as lil_matrix
 
 def mask_pixels(mask):
@@ -65,6 +66,7 @@ def poisson_sparse_matrix(mask,ps_mask):
 
     # N = number of points in mask
     N = len(ps_mask)
+    #A = csr_matrix((N,N))
     A = lil_matrix((N,N))
     # Set up row for each point in mask
     for i,p in enumerate(ps_mask):
@@ -100,8 +102,8 @@ def poisson_clone(src,dst,mask):
     b = poisson_rhs_vector(src,dst,mask,ps_mask)
     x = linalg.cg(A, b)
 
-    # Copy target photo, make sure as int
-    composite = np.copy(dst)
+    # Copy target photo
+    composite = np.copy(dst).astype(int)
     # Place new estimate in dst on mask
     for i,p in enumerate(ps_mask):
         composite[p] = x[0][i]

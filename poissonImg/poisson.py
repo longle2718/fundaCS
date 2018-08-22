@@ -96,7 +96,7 @@ def process(source, target, mask):
     # Solve for x, unknown intensities
     x = linalg.cg(A, b)
     # Copy target photo, make sure as int
-    composite = np.copy(target)#.astype(int)
+    composite = np.copy(target).astype(int)
     # Place new intensity on target at given index
     for i,index in enumerate(indicies):
         composite[index] = x[0][i]
