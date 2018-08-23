@@ -1,5 +1,10 @@
 '''
 Poisson Image Editing
+Reference: https://github.com/willemmanuel/poisson-image-editing
+Image reconstruction from a gradient image by solving a Poisson equation.
+Alternative approaches include 
++ Directly solving for the unknown image given the gradient (https://www.mathworks.com/matlabcentral/fileexchange/9734-inverse-integrated-gradient?focused=3773008&tab=function)
++ Convolution pyramids (http://www.cs.huji.ac.il/labs/cglab/projects/convpyr/)
 
 Long Le <longle2718@gmail.com>
 '''
@@ -103,8 +108,9 @@ def poisson_clone(src,dst,mask):
     x = linalg.cg(A, b)
 
     # Copy target photo
-    composite = np.copy(dst).astype(int)
+    composite = np.copy(dst)
     # Place new estimate in dst on mask
     for i,p in enumerate(ps_mask):
-        composite[p] = x[0][i]
+        # ensure valid solutions
+        composite[p] = min(1,max(0,x[0][i]))
     return composite
