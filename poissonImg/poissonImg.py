@@ -1,19 +1,24 @@
 '''
-Poisson Image Editing
-Reference: https://github.com/willemmanuel/poisson-image-editing
-Image reconstruction from a gradient image by solving a Poisson equation.
-Alternative approaches include 
-+ Directly solving for the unknown image given the gradient (https://www.mathworks.com/matlabcentral/fileexchange/9734-inverse-integrated-gradient?focused=3773008&tab=function)
-+ Convolution pyramids (http://www.cs.huji.ac.il/labs/cglab/projects/convpyr/)
+Poisson Image Editing / Gradient domain processing
 
 Long Le <longle2718@gmail.com>
 '''
 
 import numpy as np
+import scipy
 from scipy.sparse import linalg as linalg
 #from scipy.sparse import csr_matrix as csr_matrix
 from scipy.sparse import lil_matrix as lil_matrix
+#from scipy.fftpack import dst as dst
+#from scipy.fftpack import idst as idst
 
+'''
+Image reconstruction from a gradient image by solving a Poisson equation.
+Reference: https://github.com/willemmanuel/poisson-image-editing
+Alternative approaches include 
++ Directly solving for the unknown image given the gradient (https://www.mathworks.com/matlabcentral/fileexchange/9734-inverse-integrated-gradient?focused=3773008&tab=function)
++ Convolution pyramids (http://www.cs.huji.ac.il/labs/cglab/projects/convpyr/
+'''
 def mask_pixels(mask):
     nonzero = np.nonzero(mask)
     # zip returns an object in python3
@@ -114,3 +119,98 @@ def poisson_clone(src,dst,mask):
         # ensure valid solutions
         composite[p] = min(1,max(0,x[0][i]))
     return composite
+
+'''
+Gradient image integration
+reference: http://www.amitkagrawal.com/cvpr06/EdgeSuppression.html    
+'''
+def imgradient(im):
+    gx = np.zeros(im.shape)
+    for k in range(im.shape[0]):
+        for l in range(im.shape[1]-1):
+            gx[k,l] = im[k,l+1] - im[k,l]
+    
+    gy = np.zeros(im.shape)
+    for k in range(im.shape[0]-1):
+        for l in range(im.shape[1]):
+            gy[k,l] = im[k+1,l] - im[k,l]
+    
+    return gx,gy
+
+def intgrad(gx,gy,im_bdry):
+    # zero out unused part of the boundary image
+    im_bdry[1:-1,1:-1] = 0
+
+    # laplacian
+    H,W = gx.shape
+    gyy = np.zeros((H,W))
+    gxx = np.zeros((H,W))
+    for k in range(H-1):
+        for l in range(W-1):
+            gyy[k+1,l] = gy[k+1,l] - gy[k,l]
+            gxx[k,l+1] = gx[k,l+1] - gx[k,l]
+    f = gxx + gyy
+    #print('f.shape = %s' % (f.shape,))
+
+    # DST algo starts
+    f_bp = np.zeros((H,W))
+    for k in range(1,H-1):
+        for l in range(1,W-1):
+            f_bp[k,l] = -4*im_bdry[k,l]+im_bdry[k,l+1]+im_bdry[k,l-1]+im_bdry[k+1,l]+im_bdry[k-1,l]
+    #print('f_bp.shape = %s' % (f_bp.shape,))
+    
+    # subtract boundary points contribution
+    f1 = f - f_bp
+    #print('f1.shape = %s' % (f1.shape,))
+
+    f2 = f1[1:-1,1:-1]
+    #print('f2.shape = %s' % (f2.shape,))
+
+    # compute sine transform
+    tt = dst(f2)
+    f2sin = dst(tt.T).T
+    #print('f2sin.shape = %s' % (f2sin.shape,))
+
+    # compute eigen values
+    x,y = np.meshgrid(np.arange(1,W-1),np.arange(1,H-1))
+    #print('x.shape = %s' % (x.shape,))
+    #print('y.shape = %s' % (y.shape,))
+    denom = 2*np.cos(np.pi*x/(W-1))-2 + 2*np.cos(np.pi*y/(H-1))-2
+    #print('denom.shape = %s' % (denom.shape,))
+
+    # divide
+    f3 = f2sin/denom
+
+    # compute inverse sine transform
+    tt = idst(f3)
+   
+    im_tt = idst(tt.T).T
+
+    # put solution in inner points; outer points obtained from boundary image
+    im_out = im_bdry
+    im_out[1:-1,1:-1] = im_tt
+    
+    return im_out
+
+def dst(a):
+    '''
+    n,m = a.shape
+    aa = np.array(a)
+    y = np.zeros((2*(n+1),m))
+    y[1:n+1,:] = aa
+    y[n+2:2*n+2,:] = -np.flipud(aa)
+    yy = np.fft.fft(y)
+    b = yy[1:n+1,:]/(-2j)
+    b  = np.real(b)
+    return b
+    '''
+    return scipy.fftpack.dst(a)
+   
+def idst(a):
+    '''
+    n = a.shape[0]
+    nn = n+1
+    b = 2/nn*dst(a)
+    return b
+    '''
+    return scipy.fftpack.idst(a)
