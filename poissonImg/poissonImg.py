@@ -9,8 +9,6 @@ import scipy
 from scipy.sparse import linalg as linalg
 #from scipy.sparse import csr_matrix as csr_matrix
 from scipy.sparse import lil_matrix as lil_matrix
-#from scipy.fftpack import dst as dst
-#from scipy.fftpack import idst as idst
 
 '''
 Image reconstruction from a gradient image by solving a Poisson equation.
@@ -188,29 +186,23 @@ def intgrad(gx,gy,im_bdry):
 
     # put solution in inner points; outer points obtained from boundary image
     im_out = im_bdry
-    im_out[1:-1,1:-1] = im_tt
+    im_out[1:-1,1:-1] = np.maximum(0,np.minimum(255,im_tt))
     
     return im_out
 
 def dst(a):
-    '''
     n,m = a.shape
     aa = np.array(a)
     y = np.zeros((2*(n+1),m))
     y[1:n+1,:] = aa
     y[n+2:2*n+2,:] = -np.flipud(aa)
-    yy = np.fft.fft(y)
+    yy = np.fft.fft(y,axis=0)
     b = yy[1:n+1,:]/(-2j)
     b  = np.real(b)
     return b
-    '''
-    return scipy.fftpack.dst(a)
    
 def idst(a):
-    '''
     n = a.shape[0]
     nn = n+1
-    b = 2/nn*dst(a)
+    b = 2./nn*dst(a)
     return b
-    '''
-    return scipy.fftpack.idst(a)
