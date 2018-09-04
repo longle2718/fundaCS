@@ -11,11 +11,11 @@ from scipy.sparse import linalg as linalg
 from scipy.sparse import lil_matrix as lil_matrix
 
 '''
-Image reconstruction from a gradient image by solving a Poisson equation.
-Reference: https://github.com/willemmanuel/poisson-image-editing
-Alternative approaches include 
-+ Directly solving for the unknown image given the gradient (https://www.mathworks.com/matlabcentral/fileexchange/9734-inverse-integrated-gradient?focused=3773008&tab=function)
-+ Convolution pyramids (http://www.cs.huji.ac.il/labs/cglab/projects/convpyr/
+Image reconstruction from gradient images by solving a Poisson 
+equation (https://github.com/willemmanuel/poisson-image-editing).
+Related work:
+Directly solving the gradient least square formulation 
+(https://www.mathworks.com/matlabcentral/fileexchange/9734-inverse-integrated-gradient?focused=3773008&tab=function).
 '''
 def mask_pixels(mask):
     nonzero = np.nonzero(mask)
@@ -119,8 +119,9 @@ def poisson_clone(src,dst,mask):
     return composite
 
 '''
-Gradient image integration
-reference: http://www.amitkagrawal.com/cvpr06/EdgeSuppression.html    
+Inverse gradient image via DST (http://www.amitkagrawal.com/cvpr06/EdgeSuppression.html).
+Related work:
+Convolution pyramids (http://www.cs.huji.ac.il/labs/cglab/projects/convpyr/).
 '''
 def imgradient(im):
     gx = np.zeros(im.shape)
