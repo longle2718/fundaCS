@@ -136,7 +136,7 @@ def imgradient(im):
     
     return gx,gy
 
-def intgrad(gx,gy,im_bdry):
+def invgrad(gx,gy,im_bdry):
     # zero out unused part of the boundary image
     im_bdry[1:-1,1:-1] = 0
 
