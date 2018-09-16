@@ -1,4 +1,4 @@
-# CS fundamental problems
+# Fundamental CS problems
 Fundamental computer science (CS) problems in Python
 
 ## Dependencies
