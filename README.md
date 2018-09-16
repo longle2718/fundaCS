@@ -27,3 +27,8 @@ Maxflow/Mincut: https://github.com/pmneila/PyMaxflow
 ```bash
 pip install PyMaxflow
 ```
+
+* NetworkX
+```bash
+pip install networkx
+```
