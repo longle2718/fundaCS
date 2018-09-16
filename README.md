@@ -1,5 +1,5 @@
-# Basic CS problems
-Basic computer science (CS) problems in Python for fun!
+# CS fundamental problems
+Fundamental computer science (CS) problems in Python
 
 ## Dependencies
 * Priority queue dictionary
@@ -20,4 +20,10 @@ git clone https://github.com/PyWavelets/pywt
 cd pywt
 python setup.py build
 python setup.py install
+```
+
+* PyMaxflow
+Maxflow/Mincut: https://github.com/pmneila/PyMaxflow
+```bash
+pip install PyMaxflow
 ```
