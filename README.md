@@ -32,3 +32,8 @@ pip install PyMaxflow
 ```bash
 pip install networkx
 ```
+
+* Scikit learn
+```
+pip install scikit-learn
+```
