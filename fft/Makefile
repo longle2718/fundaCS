@@ -1,11 +1,13 @@
-SRCS=$(shell find $(SRC_DIRS) -name *.cpp)
-OBJS=$(subst .cpp,.o,$(SRCS))
-TARGET=main.out
-CPPFLAGS=-std=c++11
+# Use <CTRL-V><Tab> in insert mode to insert tabs
+HEADER = $(wildcard *.h)
+SRC = $(wildcard *.cpp)
+OBJ = $(patsubst %.cpp, %.o, $(SRC))
+TARGET = main.out
+CFLAGS = -std=c++11
 
-$(TARGET): $(OBJS)
-	g++ $(CPPFLAGS) -o $(TARGET) $(OBJS) -lfftw3
-%.o: %.cpp
-	g++ $(CPPFLAGS) -c $< -o $@
+$(TARGET): $(OBJ)
+	g++ $(CFLAGS) $(OBJ) -lfftw3 -o $@
+$(OBJ): $(SRC) $(HEADER)
+	g++ $(CFLAGS) -c $< -o $@
 clean:
-	rm $(TARGET) $(OBJS)
+	rm $(TARGET) $(OBJ)
