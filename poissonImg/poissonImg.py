@@ -125,33 +125,41 @@ Convolution pyramids (http://www.cs.huji.ac.il/labs/cglab/projects/convpyr/).
 '''
 def imgradient(im):
     gx = np.zeros(im.shape)
+    '''
     for k in range(im.shape[0]):
         for l in range(im.shape[1]-1):
             gx[k,l] = im[k,l+1] - im[k,l]
-    
+    '''
+    gx[:,:-1] = im[:,1:] - im[:,:-1]
+
     gy = np.zeros(im.shape)
+    '''
     for k in range(im.shape[0]-1):
         for l in range(im.shape[1]):
             gy[k,l] = im[k+1,l] - im[k,l]
-    
+    '''
+    gy[:-1,:] = im[1:,:] - im[:-1,:]
+
     return gx,gy
 
 def invgrad(gx,gy,im_bdry):
-    # zero out unused part of the boundary image
-    im_bdry[1:-1,1:-1] = 0
-
     # laplacian
     H,W = gx.shape
     gyy = np.zeros((H,W))
     gxx = np.zeros((H,W))
+    '''
     for k in range(H-1):
         for l in range(W-1):
             gyy[k+1,l] = gy[k+1,l] - gy[k,l]
             gxx[k,l+1] = gx[k,l+1] - gx[k,l]
+    '''
+    gyy[1:,:-1] = gy[1:,:-1] - gy[:-1,:-1] 
+    gxx[:-1,1:] = gx[:-1,1:] - gx[:-1,:-1] 
     f = gxx + gyy
     #print('f.shape = %s' % (f.shape,))
 
-    # DST algo starts
+    # zero out unused part of the boundary image
+    im_bdry[1:-1,1:-1] = 0
     f_bp = np.zeros((H,W))
     for k in range(1,H-1):
         for l in range(1,W-1):
@@ -159,16 +167,17 @@ def invgrad(gx,gy,im_bdry):
     #print('f_bp.shape = %s' % (f_bp.shape,))
     
     # subtract boundary points contribution
-    f1 = f - f_bp
-    #print('f1.shape = %s' % (f1.shape,))
+    f = f - f_bp
+    #print('f.shape = %s' % (f.shape,))
 
-    f2 = f1[1:-1,1:-1]
-    #print('f2.shape = %s' % (f2.shape,))
+    f = f[1:-1,1:-1]
+    #print('f.shape = %s' % (f.shape,))
 
+    # DST algo starts
     # compute sine transform
-    tt = dst(f2)
-    f2sin = dst(tt.T).T
-    #print('f2sin.shape = %s' % (f2sin.shape,))
+    F = dst(f)
+    F = dst(F.T).T
+    #print('F.shape = %s' % (F.shape,))
 
     # compute eigen values
     x,y = np.meshgrid(np.arange(1,W-1),np.arange(1,H-1))
@@ -176,27 +185,26 @@ def invgrad(gx,gy,im_bdry):
     #print('y.shape = %s' % (y.shape,))
     denom = 2*np.cos(np.pi*x/(W-1))-2 + 2*np.cos(np.pi*y/(H-1))-2
     #print('denom.shape = %s' % (denom.shape,))
-
-    # divide
-    f3 = f2sin/denom
+    # normalize
+    F = F/denom
 
     # compute inverse sine transform
-    tt = idst(f3)
-   
-    im_tt = idst(tt.T).T
+    f = idst(F)
+    f = idst(f.T).T
 
     # put solution in inner points; outer points obtained from boundary image
     im_out = im_bdry
-    im_out[1:-1,1:-1] = np.maximum(0,np.minimum(255,im_tt))
+    im_out[1:-1,1:-1] = np.maximum(0,np.minimum(255,f))
     
     return im_out
 
 def dst(a):
     n,m = a.shape
-    aa = np.array(a)
+
     y = np.zeros((2*(n+1),m))
-    y[1:n+1,:] = aa
-    y[n+2:2*n+2,:] = -np.flipud(aa)
+    y[1:n+1,:] = a
+    y[n+2:2*n+2,:] = -np.flipud(a)
+
     yy = np.fft.fft(y,axis=0)
     b = yy[1:n+1,:]/(-2j)
     b  = np.real(b)
