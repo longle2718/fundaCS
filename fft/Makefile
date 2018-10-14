@@ -10,4 +10,4 @@ $(TARGET): $(OBJ)
 $(OBJ): $(SRC) $(HEADER)
 	g++ $(CFLAGS) -c $< -o $@
 clean:
-	rm $(TARGET) $(OBJ)
+	rm -f $(TARGET) $(OBJ)
